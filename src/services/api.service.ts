@@ -32,10 +32,8 @@ export class ApiClient {
     data?: any,
     headers?: HttpHeaders
   ): Promise<T> {
-    if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
-      return Promise.reject(
-        "Missing .env file or NEXT_PUBLIC_API_BASE_URL field"
-      );
+    if (!process.env.VUE_APP_BASE_URL) {
+      return Promise.reject("Missing .env file or API_BASE_URL field");
     }
     const optionalConfig: AxiosRequestConfig = {};
 
@@ -91,3 +89,7 @@ export class ApiClient {
     return this.request<T>(HttpMethod.PUT, endpoint, undefined, data, headers);
   }
 }
+
+export const apiClient = new ApiClient(process.env.VUE_APP_BASE_URL, {
+  "Content-Type": "application/json",
+});
