@@ -26,5 +26,5 @@
 </template>
 
 <script setup lang="ts">
-import { mobileNavState } from "../../store/mobileNav.state";
+import { mobileNavState } from "../../store/mobileNav/mobileNav.state";
 </script>

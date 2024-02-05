@@ -25,5 +25,5 @@
 <script lang="ts" setup>
 import { RouterLink } from "vue-router";
 import NavDrop from "../NavDropdown/NavDropdown.vue";
-import { mobileNavActions } from "../../store/mobileNav.state";
+import { mobileNavActions } from "../../store/mobileNav/mobileNav.state";
 </script>
