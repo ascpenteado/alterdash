@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuetify from "vuetify/lib/framework";
 import { VuetifyPreset } from "vuetify/types";
+import { isDarkModePreferredByUser } from "@/utils/isDarkModePreferredByUser";
 
 Vue.use(Vuetify);
 
@@ -21,7 +22,7 @@ export const preset: VuetifyPreset = {
   },
   rtl: false,
   theme: {
-    dark: false,
+    dark: isDarkModePreferredByUser(),
     default: "dark",
     disable: false,
     options: {
@@ -30,7 +31,7 @@ export const preset: VuetifyPreset = {
     },
     themes: {
       light: {
-        primary: "#424242",
+        primary: "#1976D2",
         secondary: "#FFFFFF",
         accent: "#FF4081",
         error: "#FF5252",
@@ -39,7 +40,7 @@ export const preset: VuetifyPreset = {
         warning: "#FB8C00",
       },
       dark: {
-        primary: "#212121",
+        primary: "#1A237E",
         secondary: "#FFFFFF",
         accent: "#FF4081",
         error: "#FF5252",
@@ -52,6 +53,7 @@ export const preset: VuetifyPreset = {
   lang: {
     current: "pt-BR",
     locales: { "pt-BR": {} },
+    // eslint-disable-next-line
     t: undefined as any,
   },
 };
