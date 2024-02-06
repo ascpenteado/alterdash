@@ -1,9 +1,4 @@
-import axios, {
-  AxiosRequestConfig,
-  AxiosInstance,
-  isAxiosError,
-  AxiosError,
-} from "axios";
+import axios, { AxiosRequestConfig, AxiosInstance } from "axios";
 
 type HttpHeaders = { [key: string]: string };
 
@@ -28,12 +23,12 @@ export class ApiClient {
   private async request<T>(
     method: HttpMethod,
     url: string,
-    params?: any,
-    data?: any,
+    params?: unknown,
+    data?: unknown,
     headers?: HttpHeaders
   ): Promise<T> {
     if (!process.env.VUE_APP_BASE_URL) {
-      return Promise.reject("Missing .env file or API_BASE_URL field");
+      return Promise.reject("Missing .env file or VUE_APP_BASE_URL field");
     }
     const optionalConfig: AxiosRequestConfig = {};
 
@@ -47,21 +42,13 @@ export class ApiClient {
 
     const config = { method, url, headers, ...optionalConfig };
 
-    try {
-      const resp = await this.axios.request<T>(config);
-      return resp.data;
-    } catch (error) {
-      const axiosErr = isAxiosError(error);
-      if (axiosErr) {
-        console.log((error as AxiosError).config?.baseURL);
-      }
-      throw new Error(error as unknown as string);
-    }
+    const resp = await this.axios.request<T>(config);
+    return resp.data;
   }
 
   public get<T>(
     endpoint: string,
-    params?: any,
+    params?: unknown,
     headers?: Record<string, string>
   ): Promise<T> {
     const config: AxiosRequestConfig = {
@@ -75,7 +62,7 @@ export class ApiClient {
 
   public post<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     headers?: Record<string, string>
   ): Promise<T> {
     return this.request<T>(HttpMethod.POST, endpoint, undefined, data, headers);
@@ -83,7 +70,7 @@ export class ApiClient {
 
   public put<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     headers?: Record<string, string>
   ): Promise<T> {
     return this.request<T>(HttpMethod.PUT, endpoint, undefined, data, headers);
