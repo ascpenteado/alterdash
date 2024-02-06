@@ -1,25 +1,25 @@
-import { ref } from "vue";
+import { reactive } from "vue";
 
 type SnackbarState = {
   visible: boolean;
-  message: string;
+  message: string | string[];
   color: string;
 };
 
-export const state = ref<SnackbarState>({
+export const state = reactive<SnackbarState>({
   visible: false,
   message: "",
   color: "",
 });
 
-export const showSnackbar = (message: string, color: string) => {
-  state.value.visible = true;
-  state.value.message = message;
-  state.value.color = color;
+export const showSnackbar = (message: string | string[], color: string) => {
+  state.visible = true;
+  state.message = message;
+  state.color = color;
 };
 
 export const hideSnackbar = () => {
-  state.value.visible = false;
-  state.value.message = "";
-  state.value.color = "";
+  state.visible = false;
+  state.message = "";
+  state.color = "";
 };

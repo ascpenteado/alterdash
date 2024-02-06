@@ -12,7 +12,7 @@
             </div>
             <v-card-title>Login</v-card-title>
             <v-card-text>
-              <LoginForm />
+              <login-form />
             </v-card-text>
           </v-card>
         </v-container>
@@ -22,7 +22,17 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
+import Vue from "vue";
 import LoginForm from "@/components/LoginForm/LoginForm.vue";
 import SnackBar from "@/components/SnackBar/SnackBar.vue";
+
+const LoginView = Vue.extend({
+  components: {
+    LoginForm,
+    SnackBar,
+  },
+});
+
+export default LoginView;
 </script>
