@@ -1,5 +1,5 @@
 <template>
-  <v-form @submit.prevent="login">
+  <v-form v-on:submit.prevent="login" id="login">
     <v-text-field
       v-model="email"
       label="Email"
@@ -16,35 +16,34 @@
   </v-form>
 </template>
 
-<script lang="ts" setup>
-import { ref } from "vue";
-import { showSnackbar } from "../../store/snackBar/snackBar.state";
-import { apiClient } from "../../services/api.service";
-import { ObjetoUsuario } from "../../types/api.types";
-import router from "../../router";
+<script lang="ts">
+import Vue from "vue";
+import { showSnackbar } from "@/store/snackBar/snackBar.state";
+import { validateLoginFormFields } from "./LoginForm.helpers";
+import { apiLogin } from "@/services/login";
 
-const email = ref("");
-const password = ref("");
+const LoginForm = Vue.extend({
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    async login() {
+      const errors = validateLoginFormFields(this.email, this.password);
+      if (errors?.length) {
+        return showSnackbar(errors, "error");
+      }
 
-const login = async () => {
-  if (!email.value) {
-    return showSnackbar("O email é obrigatório", "red");
-  }
+      try {
+        apiLogin(this.email, this.password);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
+});
 
-  if (!password.value) {
-    return showSnackbar("A senha é obrigatória", "red");
-  }
-
-  const res = await apiClient.post<ObjetoUsuario>("/login", {
-    email: email.value,
-    senha: password.value,
-  });
-
-  if (!res) return;
-
-  if (res.token) {
-    localStorage.setItem("token", res.token);
-    router.push("/");
-  }
-};
+export default LoginForm;
 </script>
