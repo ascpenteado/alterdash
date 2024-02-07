@@ -26,7 +26,7 @@
 import Vue from "vue";
 import { logout } from "../../services/logout";
 
-export default Vue.extend({
+const NavDrop = Vue.extend({
   name: "NavDrop",
   methods: {
     logout() {
@@ -34,4 +34,6 @@ export default Vue.extend({
     },
   },
 });
+
+export default NavDrop;
 </script>
