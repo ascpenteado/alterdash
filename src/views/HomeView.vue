@@ -1,16 +1,18 @@
 <template>
-  <hello-world />
+  <v-container>
+    <p>Hello World</p>
+  </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "../components/HelloWorld.vue";
+import { VContainer } from "vuetify/lib";
 
 export default Vue.extend({
   name: "HomeView",
 
   components: {
-    HelloWorld,
+    VContainer,
   },
 });
 </script>
