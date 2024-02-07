@@ -54,10 +54,15 @@ export class ApiClient {
     const config: AxiosRequestConfig = {
       params: params,
     };
-    return this.request<T>(HttpMethod.GET, endpoint, undefined, {
-      params: config.params,
-      ...headers,
-    });
+    return this.request<T>(
+      HttpMethod.GET,
+      endpoint,
+      undefined,
+      {
+        params: config.params,
+      },
+      headers
+    );
   }
 
   public post<T>(
