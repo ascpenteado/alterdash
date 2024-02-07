@@ -1,16 +1,10 @@
 import { apiLogin } from "../../../services/login";
 import { apiClient } from "../../../services/api.service";
 import router from "../../../router";
+import { useLocalStorageMock } from "../../../utils/useLocalStorageMock";
 
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  clear: jest.fn(),
-};
+useLocalStorageMock();
 
-Object.defineProperty(window, "localStorage", {
-  value: localStorageMock,
-});
 jest.mock("../../../services/api.service");
 jest.mock("../../../router");
 
