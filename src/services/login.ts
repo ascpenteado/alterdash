@@ -15,6 +15,6 @@ export const apiLogin = async (email: string, password: string) => {
     }
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    showSnackbar((error as any).response.data.mensagem, "error");
+    showSnackbar((error as any).response?.data.mensagem, "error");
   }
 };
