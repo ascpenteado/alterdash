@@ -10,9 +10,9 @@
         <v-list-item-icon>
           <v-icon>mdi-account</v-icon>
         </v-list-item-icon>
-        <v-list-item-title>Profile</v-list-item-title>
+        <v-list-item-title>Perfil</v-list-item-title>
       </v-list-item>
-      <v-list-item link to="/logout">
+      <v-list-item link @click="logout">
         <v-list-item-icon>
           <v-icon>mdi-logout</v-icon>
         </v-list-item-icon>
@@ -24,8 +24,14 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { logout } from "../../services/logout";
 
 export default Vue.extend({
   name: "NavDrop",
+  methods: {
+    logout() {
+      logout();
+    },
+  },
 });
 </script>
