@@ -1,5 +1,12 @@
 <template>
-  <v-snackbar v-model="state.visible" :color="state.color" top right app>
+  <v-snackbar
+    v-model="state.visible"
+    :color="state.color"
+    :timeout="state.timeout"
+    top
+    right
+    app
+  >
     <div class="d-flex justify-space-between align-center p-0">
       <template v-if="Array.isArray(state.message)">
         <ul>
