@@ -11,14 +11,17 @@ type LoginPayload = {
 
 export const apiLogin = async (email: string, password: string) => {
   try {
-    const res = await apiClient.post<ObjetoUsuario, LoginPayload>("/login", {
-      email,
-      senha: password,
+    const res = await apiClient.post<ObjetoUsuario, LoginPayload>({
+      url: "/login",
+      data: {
+        email,
+        senha: password,
+      },
     });
+
     if (res.token) {
       setToken(res.token);
-      apiClient.setAuthorizationHeader(res.token);
-      router.push("/");
+      router.push("/home");
     }
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
