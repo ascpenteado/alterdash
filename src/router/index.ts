@@ -3,6 +3,8 @@ import VueRouter, { RouteConfig } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import DefaultLayout from "../layouts/DefaultLayout.vue";
 import { productRoutes } from "./product.routes";
+import { getToken } from "../utils/manageToken";
+import { validateMD5Hash } from "../utils/validateMd5Hash";
 
 Vue.use(VueRouter);
 
@@ -43,7 +45,8 @@ const routes: Array<RouteConfig> = [
 const router = new VueRouter({ routes });
 
 router.beforeEach((to, _, next) => {
-  const isAuthenticated = localStorage.getItem("token") !== null;
+  const token = getToken() ?? "";
+  const isAuthenticated = validateMD5Hash(token);
   const isLoginPage = to.name === "login";
 
   if (!isAuthenticated && !isLoginPage) {
