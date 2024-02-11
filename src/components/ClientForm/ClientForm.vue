@@ -4,7 +4,7 @@
       <v-col cols="6">
         <v-text-field
           :value="propsClient?.id"
-          label="ID do produto"
+          label="ID do cliente"
           required
           ref="id"
           disabled
@@ -34,11 +34,13 @@
       <v-col cols="12" sm="4">
         <v-text-field
           v-model.trim="formFields.cpfOuCnpj"
-          label="CPF ou CNPJ"
+          label="CPF/CNPJ"
           color="accent"
           :rules="[rules.cpfOuCnpj]"
           required
           ref="cpfOuCnpj"
+          v-maska
+          data-maska="['###.###.###-##','##.###.###/####-##']"
         ></v-text-field>
       </v-col>
       <v-col cols="12" sm="4">
@@ -46,7 +48,7 @@
           v-model.trim="formFields.idUsuario"
           label="ID Usuário"
           color="accent"
-          :rules="[rules.required, rules.minLength]"
+          :rules="[rules.required, rules.shouldBePositiveInteger]"
           required
           ref="idUsuario"
         ></v-text-field>
@@ -58,7 +60,7 @@
           v-model.trim="formFields.email"
           label="Email"
           color="accent"
-          :rules="[rules.required, rules.minLength]"
+          :rules="[rules.required, rules.email]"
           required
           ref="email"
         ></v-text-field>
@@ -68,9 +70,11 @@
           v-model.trim="formFields.telefone"
           label="Telefone"
           color="accent"
-          :rules="[rules.required, rules.minLength]"
+          :rules="[rules.required, rules.phone]"
           required
           ref="telefone"
+          v-maska
+          data-maska="['(##) ####-####','(##) #####-####']"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -85,8 +89,7 @@
 import Vue, { PropType } from "vue";
 import { ApiClientData } from "../../types/clients.types";
 import { formValidationRules } from "../../utils/formValidationRules";
-import { showSnackbar } from "../../store/snackBar/snackBar.state";
-import { ApiProduct } from "../../types/product.types";
+import { showSnackbar } from "@/store/snackBar/snackBar.state";
 
 type dataReturnType = {
   client: Omit<ApiClientData, "id">;
@@ -140,33 +143,40 @@ const ClientForm = Vue.extend({
   },
   methods: {
     submit() {
-      console.log("submit");
-      //   const formRef = this.$refs.form as HTMLFormElement;
+      const formRef = this.$refs.form as HTMLFormElement;
 
-      //   this.valid = formRef.validate();
+      this.valid = formRef.validate();
 
-      //   if (!this.valid) {
-      //     showSnackbar("Preencha os campos corretamente", "error");
-      //     return;
-      //   }
+      if (!this.valid) {
+        showSnackbar("Preencha os campos corretamente", "error");
+        return;
+      }
 
-      //   const valor = (this.produto.valor as string).replace(",", ".");
+      // limpando as máscasras
+      const cpfOuCnpj = this.client.cpfOuCnpj.replace(/[^\d]+/g, "");
 
-      //   const apiProduct: Omit<ApiProduct, "id" | "dataCadastro"> = {
-      //     ...this.produto,
-      //     valor: Number(valor),
-      //     quantidadeEstoque: Number(this.produto.quantidadeEstoque),
-      //   };
+      const telefone = this.client.telefone.replace(/[^\d]+/g, "");
 
-      //   this.$emit("submit", apiProduct);
+      const idUsuario = Number(this.client.idUsuario);
+
+      this.client = {
+        ...this.client,
+        cpfOuCnpj,
+        telefone,
+        idUsuario,
+      };
+
+      this.$emit("submit", this.client);
     },
     reset() {
-      //   this.produto = {
-      //     nome: "",
-      //     valor: "",
-      //     quantidadeEstoque: "",
-      //     observacao: "",
-      //   };
+      this.client = {
+        dataCadastro: "",
+        cpfOuCnpj: "",
+        idUsuario: Number(""),
+        email: "",
+        nome: "",
+        telefone: "",
+      };
 
       const formRef = this.$refs.form as HTMLFormElement;
       formRef.resetValidation();
