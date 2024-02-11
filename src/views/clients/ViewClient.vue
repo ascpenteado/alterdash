@@ -2,7 +2,7 @@
   <v-container>
     <view-toolbar title="Editar produto" showGoBack></view-toolbar>
     <v-card class="pa-4">
-      <client-form :propsClient="product" @submit="submit"></client-form>
+      <client-form :propsClient="client" @submit="updateClient"></client-form>
     </v-card>
   </v-container>
 </template>
@@ -10,9 +10,8 @@
 <script lang="ts">
 import Vue from "vue";
 import { ViewToolbar, ClientForm } from "@/components";
-import { editProduct } from "@/services/product/editProduct";
-import { Product } from "@/types/product.types";
-import { getProductById } from "@/services/product/getProductById";
+import { ApiClientData } from "@/types/clients.types";
+import { getClientById } from "@/services/clients/getClientById";
 
 const ViewProduct = Vue.extend({
   components: {
@@ -20,34 +19,31 @@ const ViewProduct = Vue.extend({
     ViewToolbar,
   },
   async created() {
-    const productId = this.$route.params.id;
-    const apiProduct = await getProductById(productId);
+    const clientId = this.$route.params.id;
+    const apiClient = await getClientById(clientId);
 
-    if (!apiProduct) {
+    if (!apiClient) {
       return;
     }
 
-    if (apiProduct.id) {
-      this.product = {
-        nome: apiProduct.nome,
-        observacao: apiProduct.observacao,
-        valor: apiProduct.valor,
-        quantidadeEstoque: apiProduct.quantidadeEstoque,
-        dataCadastro: new Date(apiProduct.dataCadastro).toLocaleDateString(
+    if (apiClient.id) {
+      this.client = {
+        ...apiClient,
+        dataCadastro: new Date(apiClient.dataCadastro).toLocaleDateString(
           "pt-BR"
         ),
-        id: apiProduct.id,
       };
     }
   },
   data() {
     return {
-      product: {} as Product,
+      client: {} as ApiClientData,
     };
   },
   methods: {
-    async updateProduct(product: Product) {
-      editProduct(product);
+    async updateClient(client: ApiClientData) {
+      console.log("client", client);
+      // editClient(client);
     },
   },
 });
