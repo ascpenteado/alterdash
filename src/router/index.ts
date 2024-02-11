@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import DefaultLayout from "../layouts/DefaultLayout.vue";
+import { productRoutes } from "./product.routes";
 
 Vue.use(VueRouter);
 
@@ -16,12 +17,10 @@ const routes: Array<RouteConfig> = [
         component: HomeView,
       },
       {
-        path: "/products",
-        name: "products",
+        path: "/profile",
+        name: "profile",
         component: () =>
-          import(
-            /* webpackChunkName: "products" */ "../views/ProductsView.vue"
-          ),
+          import(/* webpackChunkName: "profile" */ "../views/ClientsView.vue"),
       },
       {
         path: "/clients",
@@ -29,12 +28,7 @@ const routes: Array<RouteConfig> = [
         component: () =>
           import(/* webpackChunkName: "clients" */ "../views/ClientsView.vue"),
       },
-      {
-        path: "/profile",
-        name: "profile",
-        component: () =>
-          import(/* webpackChunkName: "clients" */ "../views/ClientsView.vue"),
-      },
+      ...productRoutes,
     ],
   },
 
@@ -46,9 +40,7 @@ const routes: Array<RouteConfig> = [
   },
 ];
 
-const router = new VueRouter({
-  routes,
-});
+const router = new VueRouter({ routes });
 
 router.beforeEach((to, _, next) => {
   const isAuthenticated = localStorage.getItem("token") !== null;
