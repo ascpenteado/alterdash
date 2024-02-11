@@ -17,7 +17,7 @@
       </template>
       <span v-else>{{ state.message }}</span>
 
-      <v-btn text @click="hideSnackbar">Fechar</v-btn>
+      <v-btn class="ml-3" text @click="hideSnackbar">Fechar</v-btn>
     </div>
   </v-snackbar>
 </template>
@@ -41,3 +41,9 @@ const SnackBar = Vue.extend({
 
 export default SnackBar;
 </script>
+
+<style lang="scss" scoped>
+ul {
+  list-style: none;
+}
+</style>
