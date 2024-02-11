@@ -1,16 +1,9 @@
-import axios, { AxiosRequestConfig, AxiosInstance } from "axios";
-
-type HttpHeaders = { [key: string]: string };
-
-export enum HttpMethod {
-  GET = "GET",
-  POST = "POST",
-  PUT = "PUT",
-  DELETE = "DELETE",
-}
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { HttpMethod } from "../types/api.types";
+import { validateMD5Hash } from "../utils/validateMd5Hash";
 
 export class ApiClient {
-  axios: AxiosInstance;
+  private axios: AxiosInstance;
 
   constructor(baseURL: string, headers: Record<string, string>) {
     this.axios = axios.create({
@@ -20,12 +13,17 @@ export class ApiClient {
     });
   }
 
+  public setAuthorizationHeader(token: string): void {
+    if (validateMD5Hash(token)) {
+      this.axios.defaults.headers.Authorization = token;
+    }
+  }
+
   private async request<ResponseType>(
     method: HttpMethod,
     url: string,
     params?: unknown,
-    data?: unknown,
-    headers?: HttpHeaders
+    data?: unknown
   ): Promise<ResponseType> {
     if (!process.env.VUE_APP_BASE_URL) {
       return Promise.reject("Missing .env file or VUE_APP_BASE_URL field");
@@ -40,7 +38,7 @@ export class ApiClient {
       optionalConfig.data = data;
     }
 
-    const config = { method, url, headers, ...optionalConfig };
+    const config = { method, url, ...optionalConfig };
 
     const resp = await this.axios.request<ResponseType>(config);
     return resp.data;
@@ -48,48 +46,37 @@ export class ApiClient {
 
   public get<ResponseType>(
     endpoint: string,
-    params?: unknown,
-    headers?: Record<string, string>
+    params?: unknown
   ): Promise<ResponseType> {
     const config: AxiosRequestConfig = {
       params: params,
     };
-    return this.request<ResponseType>(
-      HttpMethod.GET,
-      endpoint,
-      undefined,
-      {
-        params: config.params,
-      },
-      headers
-    );
+    return this.request<ResponseType>(HttpMethod.GET, endpoint, undefined, {
+      params: config.params,
+    });
   }
 
   public post<ResponseType, PayloadType>(
     endpoint: string,
-    data?: PayloadType,
-    headers?: Record<string, string>
+    data?: PayloadType
   ): Promise<ResponseType> {
     return this.request<ResponseType>(
       HttpMethod.POST,
       endpoint,
       undefined,
-      data,
-      headers
+      data
     );
   }
 
   public put<ResponseType, PayloadType>(
     endpoint: string,
-    data?: PayloadType,
-    headers?: Record<string, string>
+    data?: PayloadType
   ): Promise<ResponseType> {
     return this.request<ResponseType>(
       HttpMethod.PUT,
       endpoint,
       undefined,
-      data,
-      headers
+      data
     );
   }
 }
