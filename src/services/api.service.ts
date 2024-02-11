@@ -20,13 +20,13 @@ export class ApiClient {
     });
   }
 
-  private async request<T>(
+  private async request<ResponseType>(
     method: HttpMethod,
     url: string,
     params?: unknown,
     data?: unknown,
     headers?: HttpHeaders
-  ): Promise<T> {
+  ): Promise<ResponseType> {
     if (!process.env.VUE_APP_BASE_URL) {
       return Promise.reject("Missing .env file or VUE_APP_BASE_URL field");
     }
@@ -42,19 +42,19 @@ export class ApiClient {
 
     const config = { method, url, headers, ...optionalConfig };
 
-    const resp = await this.axios.request<T>(config);
+    const resp = await this.axios.request<ResponseType>(config);
     return resp.data;
   }
 
-  public get<T>(
+  public get<ResponseType>(
     endpoint: string,
     params?: unknown,
     headers?: Record<string, string>
-  ): Promise<T> {
+  ): Promise<ResponseType> {
     const config: AxiosRequestConfig = {
       params: params,
     };
-    return this.request<T>(
+    return this.request<ResponseType>(
       HttpMethod.GET,
       endpoint,
       undefined,
@@ -65,20 +65,32 @@ export class ApiClient {
     );
   }
 
-  public post<T>(
+  public post<ResponseType, PayloadType>(
     endpoint: string,
-    data?: unknown,
+    data?: PayloadType,
     headers?: Record<string, string>
-  ): Promise<T> {
-    return this.request<T>(HttpMethod.POST, endpoint, undefined, data, headers);
+  ): Promise<ResponseType> {
+    return this.request<ResponseType>(
+      HttpMethod.POST,
+      endpoint,
+      undefined,
+      data,
+      headers
+    );
   }
 
-  public put<T>(
+  public put<ResponseType, PayloadType>(
     endpoint: string,
-    data?: unknown,
+    data?: PayloadType,
     headers?: Record<string, string>
-  ): Promise<T> {
-    return this.request<T>(HttpMethod.PUT, endpoint, undefined, data, headers);
+  ): Promise<ResponseType> {
+    return this.request<ResponseType>(
+      HttpMethod.PUT,
+      endpoint,
+      undefined,
+      data,
+      headers
+    );
   }
 }
 
