@@ -55,17 +55,10 @@ router.beforeEach((to, _, next) => {
 
   if (!isAuthenticated && !isLoginPage) {
     next({ name: "login" });
-    return;
-  }
-
-  if (isAuthenticated && isLoginPage) {
+  } else if (isAuthenticated && to.name === "login") {
     next({ name: "home" });
-    return;
-  }
-
-  if (isAuthenticated) {
+  } else {
     next();
-    return;
   }
 });
 
