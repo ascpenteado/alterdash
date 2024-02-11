@@ -16,7 +16,7 @@ import Vue from "vue";
 import { VContainer } from "vuetify/lib";
 import CrudTable from "@/components/CrudTable/CrudTable.vue";
 import ViewToolbar from "@/components/ViewToolbar/ViewToolbar.vue";
-import { getProducts } from "@/services/product/get-products";
+import { getProducts } from "@/services/product/getProducts";
 import router from "@/router";
 import {
   ApiProduct,
@@ -71,12 +71,7 @@ const ListProducts = Vue.extend({
     },
   },
   async created() {
-    this.token = localStorage.getItem("token");
-    if (!this.token) {
-      return router.push("/login");
-    }
-
-    const res = await getProducts(this.token);
+    const res = await getProducts();
     if (!res?.length) return;
 
     this.products = buildProducts(res);

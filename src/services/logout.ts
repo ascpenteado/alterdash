@@ -1,6 +1,7 @@
 import router from "../router";
+import { removeToken } from "../utils/manageToken";
 
 export const logout = async () => {
-  localStorage.removeItem("token");
+  removeToken();
   router.push("/login");
 };

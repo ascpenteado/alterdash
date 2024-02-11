@@ -14,7 +14,6 @@
 import CrudTable from "@/components/CrudTable/CrudTable.vue";
 import Vue from "vue";
 import { VContainer } from "vuetify/lib";
-import router from "../router";
 import { apiClient } from "../services/api.service";
 import {
   ApiClient,
@@ -22,15 +21,9 @@ import {
   ClientTableHeadersType,
 } from "../types/clients.types";
 
-async function getClients(token: string) {
-  if (!token) {
-    return;
-  }
-
+async function getClients() {
   try {
-    return await apiClient.get<ApiClient[]>("/clientes", null, {
-      Authorization: token,
-    });
+    return await apiClient.get<ApiClient[]>("/clientes", null);
   } catch (error) {
     console.error(">> error", error);
   }
@@ -76,12 +69,7 @@ const ClientsView = Vue.extend({
     },
   },
   async created() {
-    this.token = localStorage.getItem("token");
-    if (!this.token) {
-      return router.push("/login");
-    }
-
-    const res = await getClients(this.token);
+    const res = await getClients();
     if (!res?.length) {
       return;
     }

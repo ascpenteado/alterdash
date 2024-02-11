@@ -12,9 +12,9 @@
 import Vue from "vue";
 import ProductForm from "@/components/ProductForm/ProductForm.vue";
 import ViewToolbar from "@/components/ViewToolbar/ViewToolbar.vue";
-import { editProduct } from "@/services/product/edit-product";
+import { editProduct } from "@/services/product/editProduct";
 import { Product } from "@/types/product.types";
-import { getProductById } from "@/services/product/get-product-by-id";
+import { getProductById } from "@/services/product/getProductById";
 
 const ViewProduct = Vue.extend({
   components: {
