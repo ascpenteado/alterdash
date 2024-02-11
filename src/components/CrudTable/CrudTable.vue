@@ -7,7 +7,6 @@
       :hide-default-footer="true"
       :headers="tableHeaders"
       sort-by="id"
-      show-select
     >
       <template v-slot:item.actions="{ item }">
         <v-icon small class="mr-5 pa-2" @click="editItem(item)">
