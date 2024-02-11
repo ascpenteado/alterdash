@@ -33,12 +33,16 @@ const routes: Array<RouteConfig> = [
       ...productRoutes,
     ],
   },
-
   {
     path: "/login",
     name: "login",
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/LoginView.vue"),
+  },
+  {
+    path: "/logout",
+    name: "logout",
+    redirect: "/login",
   },
 ];
 
@@ -51,8 +55,17 @@ router.beforeEach((to, _, next) => {
 
   if (!isAuthenticated && !isLoginPage) {
     next({ name: "login" });
-  } else {
+    return;
+  }
+
+  if (isAuthenticated && isLoginPage) {
+    next({ name: "home" });
+    return;
+  }
+
+  if (isAuthenticated) {
     next();
+    return;
   }
 });
 
