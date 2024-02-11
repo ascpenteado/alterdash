@@ -4,7 +4,6 @@
     <v-data-table
       :items="items"
       :items-per-page="10"
-      :hide-default-footer="true"
       :headers="tableHeaders"
       sort-by="id"
     >
