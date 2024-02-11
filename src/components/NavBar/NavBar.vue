@@ -46,8 +46,6 @@ import AppLogo from "../AppLogo/AppLogo.vue";
       padding: 1rem;
     }
   }
-  .v-btn--active {
-  }
 }
 
 .logo-wrapper {
