@@ -21,7 +21,7 @@ export const apiLogin = async (email: string, password: string) => {
 
     if (res.token) {
       setToken(res.token);
-      router.push("/home");
+      router.push("/");
     }
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
