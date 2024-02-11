@@ -1,6 +1,6 @@
 <template>
   <v-form ref="form" v-model="valid" @submit.prevent="submit">
-    <v-row>
+    <v-row v-if="computedProduto.id">
       <v-col cols="6">
         <v-text-field
           v-model.trim="computedProduto.id"
