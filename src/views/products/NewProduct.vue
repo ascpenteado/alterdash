@@ -9,8 +9,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ProductForm from "@/components/ProductForm/ProductForm.vue";
-import ViewToolbar from "@/components/ViewToolbar/ViewToolbar.vue";
+import { ProductForm, ViewToolbar } from "@/components";
 import { createProduct } from "@/services/product/createProduct";
 import { ApiProduct } from "@/types/product.types";
 const NewProduct = Vue.extend({

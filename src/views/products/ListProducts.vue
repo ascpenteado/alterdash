@@ -3,71 +3,56 @@
     <view-toolbar title="Produtos" addUrl="/products/new"></view-toolbar>
 
     <crud-table
+      v-if="products.length > 0"
       :items="products"
       :tableHeaders="tableHeaders"
       v-on:edit-item="editItem"
       v-on:delete-item="deleteItem"
     ></crud-table>
+    <empty-content v-else></empty-content>
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { VContainer } from "vuetify/lib";
-import CrudTable from "@/components/CrudTable/CrudTable.vue";
-import ViewToolbar from "@/components/ViewToolbar/ViewToolbar.vue";
+import { EmptyContent, CrudTable, ViewToolbar } from "@/components";
 import { getProducts } from "@/services/product/getProducts";
 import router from "@/router";
-import {
-  ApiProduct,
-  Product,
-  ProductTableHeaders,
-  ProductTableHeadersType,
-} from "@/types/product.types";
+import { Product } from "@/types/product.types";
+import { deleteProduct } from "@/services/product/deleteProduct";
+import { showSnackbar } from "../../store/snackBar/snackBar.state";
+import { buildProducts, productTableHeaders } from "./product.helper";
 
-function buildProducts(products: ApiProduct[]): Product[] {
-  return products.map((product) => ({
-    ...product,
-    valor: product.valor.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }),
-    quantidadeEstoque: product.quantidadeEstoque,
-    dataCadastro: new Date(product.dataCadastro).toLocaleDateString("pt-BR"),
-  }));
-}
-
-function buildTableHeaders(products: Product[]) {
-  const keys: { text: string; value: string; sortable?: boolean }[] =
-    Object.keys(products[0]).map((key) => ({
-      text: ProductTableHeaders[key as ProductTableHeadersType],
-      value: key,
-    }));
-
-  keys.push({ text: "Ações", value: "actions", sortable: false });
-
-  return keys;
-}
+type DataReturnType = {
+  products: Product[];
+  token: string | null;
+  tableHeaders: { text: string; value: string; sortable?: boolean }[];
+};
 
 const ListProducts = Vue.extend({
   components: {
     VContainer,
     CrudTable,
     ViewToolbar,
+    EmptyContent,
   },
-  data: () => {
+  data: (): DataReturnType => {
     return {
       products: [] as Product[],
       token: null as string | null,
-      tableHeaders: [{ text: "", value: "" }],
+      tableHeaders: [{ text: "", value: "", sortable: false }],
     };
   },
   methods: {
     editItem(item: Product) {
       router.push(`/products/${item.id}`);
     },
-    deleteItem(item: Product) {
-      console.log(">> deleteItem", item);
+    async deleteItem(item: Product) {
+      if (!item.id) return;
+      await deleteProduct(item.id);
+      this.$router.go(0);
+      showSnackbar("Produto excluído com sucesso", "success");
     },
   },
   async created() {
@@ -75,7 +60,7 @@ const ListProducts = Vue.extend({
     if (!res?.length) return;
 
     this.products = buildProducts(res);
-    this.tableHeaders = buildTableHeaders(this.products);
+    this.tableHeaders = productTableHeaders;
   },
 });
 
