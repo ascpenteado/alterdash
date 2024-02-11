@@ -8,3 +8,4 @@ export { default as NavDropdown } from "./NavDropdown/NavDropdown.vue";
 export { default as ProductForm } from "./ProductForm/ProductForm.vue";
 export { default as SnackBar } from "./SnackBar/SnackBar.vue";
 export { default as ViewToolbar } from "./ViewToolbar/ViewToolbar.vue";
+export { default as ClientForm } from "./ClientForm/ClientForm.vue";

@@ -7,4 +7,13 @@ export const formValidationRules = {
   minLength: (value: string) => value?.length >= 3 || "Mínimo de 3 caracteres",
   maxLength: (value: string) =>
     value?.length <= 255 || "Máximo de 255 caracteres",
+  cpfOrCnpj: (value: string) => {
+    if (value.length === 11) {
+      return true;
+    }
+    if (value.length === 14) {
+      return true;
+    }
+    return "CPF ou CNPJ inválido";
+  },
 };

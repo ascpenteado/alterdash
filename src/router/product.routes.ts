@@ -17,10 +17,10 @@ export const productRoutes = [
   },
   {
     path: "products/:id",
-    name: "product",
+    name: "view-product",
     component: () =>
       import(
-        /* webpackChunkName: "products" */ "../views/products/ViewProduct.vue"
+        /* webpackChunkName: "view-product" */ "../views/products/ViewProduct.vue"
       ),
   },
 ];

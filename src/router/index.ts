@@ -5,6 +5,7 @@ import DefaultLayout from "../layouts/DefaultLayout.vue";
 import { productRoutes } from "./product.routes";
 import { getToken } from "../utils/manageToken";
 import { validateMD5Hash } from "../utils/validateMd5Hash";
+import { clientRoutes } from "./client.routes";
 
 Vue.use(VueRouter);
 
@@ -18,18 +19,13 @@ const routes: Array<RouteConfig> = [
         name: "home",
         component: HomeView,
       },
-      {
-        path: "/profile",
-        name: "profile",
-        component: () =>
-          import(/* webpackChunkName: "profile" */ "../views/ClientsView.vue"),
-      },
-      {
-        path: "/clients",
-        name: "clients",
-        component: () =>
-          import(/* webpackChunkName: "clients" */ "../views/ClientsView.vue"),
-      },
+      // {
+      //   path: "/profile",
+      //   name: "profile",
+      //   component: () =>
+      //     import(/* webpackChunkName: "profile" */ "../views/ClientsView.vue"),
+      // },
+      ...clientRoutes,
       ...productRoutes,
     ],
   },
