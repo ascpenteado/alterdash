@@ -3,9 +3,14 @@ import { showSnackbar } from "../store/snackBar/snackBar.state";
 import { ObjetoUsuario } from "../types/api.types";
 import { apiClient } from "./api.service";
 
+type LoginPayload = {
+  email: string;
+  senha: string;
+};
+
 export const apiLogin = async (email: string, password: string) => {
   try {
-    const res = await apiClient.post<ObjetoUsuario>("/login", {
+    const res = await apiClient.post<ObjetoUsuario, LoginPayload>("/login", {
       email,
       senha: password,
     });
