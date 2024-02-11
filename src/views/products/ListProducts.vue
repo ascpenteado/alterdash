@@ -1,9 +1,11 @@
 <template>
   <v-container>
     <v-toolbar dense class="elevation-0 mb-2 rounded">
-      <v-toolbar-title>Clientes</v-toolbar-title>
+      <v-toolbar-title>Produtos</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text color="accent"> <v-icon>mdi-plus</v-icon> Adicionar </v-btn>
+      <v-btn text color="accent" to="/products/new">
+        <v-icon>mdi-plus</v-icon> Adicionar
+      </v-btn>
     </v-toolbar>
 
     <crud-table :items="products" :tableHeaders="tableHeaders"></crud-table>
@@ -14,14 +16,14 @@
 import Vue from "vue";
 import { VContainer } from "vuetify/lib";
 import CrudTable from "@/components/CrudTable/CrudTable.vue";
-import { apiClient } from "../services/api.service";
-import router from "../router";
+import { apiClient } from "@/services/api.service";
+import router from "@/router";
 import {
   ApiProduct,
   Product,
   ProductTableHeaders,
   ProductTableHeadersType,
-} from "../types/product.types";
+} from "@/types/product.types";
 
 async function getProcuts(token: string) {
   if (!token) {
@@ -44,6 +46,7 @@ function buildProducts(products: ApiProduct[]): Product[] {
       style: "currency",
       currency: "BRL",
     }),
+    quantidadeEstoque: product.quantidadeEstoque.toString(),
     dataCadastro: new Date(product.dataCadastro).toLocaleDateString("pt-BR"),
   }));
 }
@@ -60,7 +63,7 @@ function buildTableHeaders(products: Product[]) {
   return keys;
 }
 
-const ProductsView = Vue.extend({
+const ListProducts = Vue.extend({
   components: {
     VContainer,
     CrudTable,
@@ -96,5 +99,5 @@ const ProductsView = Vue.extend({
   },
 });
 
-export default ProductsView;
+export default ListProducts;
 </script>

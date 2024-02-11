@@ -13,7 +13,7 @@ export type Product = {
   id: number;
   nome: string;
   observacao: string;
-  quantidadeEstoque: number;
+  quantidadeEstoque: string;
 };
 
 export const ProductTableHeaders = {
