@@ -17,3 +17,7 @@ export type ObjetoUsuario = {
   usuario: Usuario;
   token: string;
 };
+
+export type ApiError = {
+  message: string;
+};
