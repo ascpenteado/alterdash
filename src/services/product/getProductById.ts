@@ -6,18 +6,8 @@ export const getProductById = async (productId: string) => {
   try {
     const id = parseInt(productId);
 
-    const headers = {
-      Authorization: `${localStorage.getItem("token")}`,
-    };
-
-    const res = await apiClient.get<ApiProduct>(
-      `/produtos/${id}`,
-      null,
-      headers
-    );
-    if (res.id) {
-      return res;
-    }
+    const res = await apiClient.get<ApiProduct>(`/produtos/${id}`);
+    if (res.id) return res;
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     showSnackbar((error as any).response?.data.mensagem, "error");

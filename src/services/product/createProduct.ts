@@ -14,14 +14,9 @@ export const createProduct = async (
       dataCadastro: new Date().toISOString(),
     };
 
-    const headers = {
-      Authorization: `${localStorage.getItem("token")}`,
-    };
-
     const res = await apiClient.post<ApiProduct, ProductPayload>(
       "/produtos",
-      payload,
-      headers
+      payload
     );
     if (res.id) {
       showSnackbar("Produto criado com sucesso", "success");

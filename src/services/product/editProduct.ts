@@ -14,14 +14,9 @@ export const editProduct = async (product: Product) => {
       dataCadastro: new Date().toISOString(),
     };
 
-    const headers = {
-      Authorization: `${localStorage.getItem("token")}`,
-    };
-
     const res = await apiClient.put<ApiProduct, ProductPayload>(
       `/produtos/${product.id}`,
-      payload,
-      headers
+      payload
     );
     if (res.id) {
       showSnackbar("Produto atualizado com sucesso", "success");

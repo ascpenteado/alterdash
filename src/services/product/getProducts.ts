@@ -8,9 +8,7 @@ export async function getProducts(token: string) {
   }
 
   try {
-    return await apiClient.get<ApiProduct[]>("/produtos", null, {
-      Authorization: token,
-    });
+    return await apiClient.get<ApiProduct[]>("/produtos");
   } catch (error: unknown) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((error as any).response.status === 401) {
