@@ -1,12 +1,6 @@
 <template>
   <v-container>
-    <v-toolbar dense class="elevation-0 mb-2 rounded">
-      <v-toolbar-title>Produtos</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn text color="accent" to="/products/new">
-        <v-icon>mdi-plus</v-icon> Adicionar
-      </v-btn>
-    </v-toolbar>
+    <view-toolbar title="Produtos" addUrl="/products/new"></view-toolbar>
 
     <crud-table :items="products" :tableHeaders="tableHeaders"></crud-table>
   </v-container>
@@ -16,6 +10,7 @@
 import Vue from "vue";
 import { VContainer } from "vuetify/lib";
 import CrudTable from "@/components/CrudTable/CrudTable.vue";
+import ViewToolbar from "@/components/ViewToolbar/ViewToolbar.vue";
 import { apiClient } from "@/services/api.service";
 import router from "@/router";
 import {
@@ -67,6 +62,7 @@ const ListProducts = Vue.extend({
   components: {
     VContainer,
     CrudTable,
+    ViewToolbar,
   },
   data: () => {
     return {
