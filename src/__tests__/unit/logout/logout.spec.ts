@@ -1,23 +1,23 @@
 import { logout } from "@/services/logout";
 import router from "@/router";
-import { useSessionStorareMock } from "@/utils/useSessionStorageMock";
+import { bindMockToWindow, storageMock } from "@/utils/useStorageMock";
 
-useSessionStorareMock();
+bindMockToWindow("localStorage");
 jest.mock("../../../router");
 
 describe("logout", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    sessionStorage.clear();
+    storageMock.clear();
   });
 
-  it("should remove token from sessionStorage and redirect to '/login' if there is a token", async () => {
-    sessionStorage.setItem("token", "mockedToken");
+  it("should remove token from localStorage and redirect to '/login' if there is a token", async () => {
+    storageMock.setItem("token", "mockedToken");
     const pushSpy = jest.spyOn(router, "push");
 
     await logout();
 
-    expect(sessionStorage.removeItem).toHaveBeenCalledWith("token");
+    expect(storageMock.removeItem).toHaveBeenCalledWith("token");
     expect(pushSpy).toHaveBeenCalledWith("/login");
   });
 });

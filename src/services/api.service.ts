@@ -79,6 +79,18 @@ export class ApiClient {
       data
     );
   }
+
+  public delete<ResponseType>(
+    endpoint: string,
+    params?: unknown
+  ): Promise<ResponseType> {
+    const config: AxiosRequestConfig = {
+      params: params,
+    };
+    return this.request<ResponseType>(HttpMethod.DELETE, endpoint, undefined, {
+      params: config.params,
+    });
+  }
 }
 
 export const apiClient = new ApiClient(process.env.VUE_APP_BASE_URL, {
