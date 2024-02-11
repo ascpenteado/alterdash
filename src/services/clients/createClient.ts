@@ -25,7 +25,7 @@ export const createClient = async (
     });
     if (res.id) {
       showSnackbar("Cliente criado com sucesso", "success");
-      router.push("/products");
+      router.push("/clients");
     }
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
