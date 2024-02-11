@@ -2,14 +2,23 @@
   <v-container>
     <view-toolbar title="Clientes" addUrl="/clients/new"></view-toolbar>
 
-    <crud-table
-      v-if="clients.length > 0"
-      :items="clients"
-      :tableHeaders="tableHeaders"
-      v-on:edit-item="editClient"
-      v-on:delete-item="deleteClient"
-    ></crud-table>
-    <empty-content v-else></empty-content>
+    <v-skeleton-loader
+      v-if="loading"
+      class="mx-auto"
+      type="table"
+      transition="fade-transition"
+    ></v-skeleton-loader>
+    <template v-else>
+      <crud-table
+        transition="fade-transition"
+        v-if="clients.length > 0"
+        :items="clients"
+        :tableHeaders="tableHeaders"
+        v-on:edit-item="editClient"
+        v-on:delete-item="deleteClient"
+      ></crud-table>
+      <empty-content v-else></empty-content>
+    </template>
   </v-container>
 </template>
 
@@ -21,11 +30,14 @@ import { CrudTable, EmptyContent, ViewToolbar } from "@/components";
 import { getClients } from "@/services/clients/getClients";
 import { ApiClientData } from "@/types/clients.types";
 import { clientsTableHeaders } from "./clients.helper";
+import { deleteClient } from "@/services/clients/deleteClient";
+import { showSnackbar } from "@/store/snackBar/snackBar.state";
 
 type DataReturnType = {
   clients: ApiClientData[];
   token: string | null;
   tableHeaders: { text: string; value: string; sortable?: boolean }[];
+  loading: boolean;
 };
 
 const ListClients = Vue.extend({
@@ -40,6 +52,7 @@ const ListClients = Vue.extend({
       clients: [] as ApiClientData[],
       token: null as string | null,
       tableHeaders: [{ text: "", value: "", sortable: false }],
+      loading: false,
     };
   },
   methods: {
@@ -48,16 +61,23 @@ const ListClients = Vue.extend({
     },
     async deleteClient(client: ApiClientData) {
       if (!client.id) return;
-      // await deleteProduct(item.id);
-      // this.$router.go(0);
-      // showSnackbar("Produto excluído com sucesso", "success");
+      try {
+        await deleteClient(client.id);
+        this.$router.go(0);
+        showSnackbar("Cliente excluído com sucesso", "success");
+      } catch (error) {
+        showSnackbar("Erro ao excluir cliente", "error");
+      }
     },
   },
   async created() {
+    this.loading = true;
     const res = await getClients();
-    if (!res?.length) return;
-    this.clients = res;
+    this.clients = res ?? [];
     this.tableHeaders = clientsTableHeaders;
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
   },
 });
 
