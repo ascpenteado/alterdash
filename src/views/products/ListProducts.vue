@@ -2,7 +2,12 @@
   <v-container>
     <view-toolbar title="Produtos" addUrl="/products/new"></view-toolbar>
 
-    <crud-table :items="products" :tableHeaders="tableHeaders"></crud-table>
+    <crud-table
+      :items="products"
+      :tableHeaders="tableHeaders"
+      v-on:edit-item="editItem"
+      v-on:delete-item="deleteItem"
+    ></crud-table>
   </v-container>
 </template>
 
@@ -11,7 +16,7 @@ import Vue from "vue";
 import { VContainer } from "vuetify/lib";
 import CrudTable from "@/components/CrudTable/CrudTable.vue";
 import ViewToolbar from "@/components/ViewToolbar/ViewToolbar.vue";
-import { apiClient } from "@/services/api.service";
+import { getProducts } from "@/services/product/get-products";
 import router from "@/router";
 import {
   ApiProduct,
@@ -20,20 +25,6 @@ import {
   ProductTableHeadersType,
 } from "@/types/product.types";
 
-async function getProcuts(token: string) {
-  if (!token) {
-    return;
-  }
-
-  try {
-    return await apiClient.get<ApiProduct[]>("/produtos", null, {
-      Authorization: token,
-    });
-  } catch (error) {
-    console.error(">> error", error);
-  }
-}
-
 function buildProducts(products: ApiProduct[]): Product[] {
   return products.map((product) => ({
     ...product,
@@ -41,7 +32,7 @@ function buildProducts(products: ApiProduct[]): Product[] {
       style: "currency",
       currency: "BRL",
     }),
-    quantidadeEstoque: product.quantidadeEstoque.toString(),
+    quantidadeEstoque: product.quantidadeEstoque,
     dataCadastro: new Date(product.dataCadastro).toLocaleDateString("pt-BR"),
   }));
 }
@@ -73,7 +64,7 @@ const ListProducts = Vue.extend({
   },
   methods: {
     editItem(item: Product) {
-      console.log(">> editItem", item);
+      router.push(`/products/${item.id}`);
     },
     deleteItem(item: Product) {
       console.log(">> deleteItem", item);
@@ -85,10 +76,8 @@ const ListProducts = Vue.extend({
       return router.push("/login");
     }
 
-    const res = await getProcuts(this.token);
-    if (!res?.length) {
-      return;
-    }
+    const res = await getProducts(this.token);
+    if (!res?.length) return;
 
     this.products = buildProducts(res);
     this.tableHeaders = buildTableHeaders(this.products);

@@ -8,12 +8,12 @@ export type ApiProduct = {
 };
 
 export type Product = {
-  valor: string;
-  dataCadastro: string;
-  id: number;
+  valor: number | string | null;
+  dataCadastro?: string;
+  id?: number;
   nome: string;
   observacao: string;
-  quantidadeEstoque: string;
+  quantidadeEstoque: number | string | null;
 };
 
 export const ProductTableHeaders = {

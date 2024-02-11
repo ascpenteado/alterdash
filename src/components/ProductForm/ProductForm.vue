@@ -1,9 +1,29 @@
 <template>
   <v-form ref="form" v-model="valid" @submit.prevent="submit">
     <v-row>
+      <v-col cols="6">
+        <v-text-field
+          v-model.trim="computedProduto.id"
+          label="ID do produto"
+          required
+          ref="id"
+          disabled
+        ></v-text-field>
+      </v-col>
+      <v-col cols="6">
+        <v-text-field
+          v-model.trim="computedProduto.dataCadastro"
+          label="Data de Cadastro"
+          required
+          ref="dataCadastro"
+          disabled
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col cols="12" sm="4">
         <v-text-field
-          v-model.trim="produto.nome"
+          v-model.trim="computedProduto.nome"
           label="Nome do produto"
           color="accent"
           :rules="[rules.required, rules.minLength]"
@@ -13,10 +33,10 @@
       </v-col>
       <v-col cols="6" sm="4">
         <v-text-field
-          v-model.trim="produto.valor"
+          v-model.trim="computedProduto.valor"
           label="Valor do produto"
-          prefix="R$"
           color="accent"
+          prefix="R$"
           :rules="[rules.required, rules.shouldBeNumber, rules.positivePrice]"
           required
           ref="valor"
@@ -24,7 +44,7 @@
       </v-col>
       <v-col cols="6" sm="4">
         <v-text-field
-          v-model.trim="produto.quantidadeEstoque"
+          v-model.trim="computedProduto.quantidadeEstoque"
           label="Quantidade em estoque"
           color="accent"
           :rules="[rules.required, rules.shouldBeNumber]"
@@ -37,7 +57,7 @@
     <v-row>
       <v-col cols="12">
         <v-text-field
-          v-model.trim="produto.observacao"
+          v-model.trim="computedProduto.observacao"
           label="Observação do produto"
           color="accent"
           :rules="[rules.minLength]"
@@ -56,11 +76,9 @@
 import Vue, { PropType } from "vue";
 import { ApiProduct, Product } from "@/types/product.types";
 import { showSnackbar } from "@/store/snackBar/snackBar.state";
-import { createProduct } from "@/services/product/create-product";
 
-type ProductFormFields = Omit<Product, "id" | "dataCadastro">;
 type dataReturnType = {
-  produto: ProductFormFields;
+  // produto: ProductFormFields;
   rules: {
     required: (value: string) => boolean | string;
     positivePrice: (value: string) => boolean | string;
@@ -74,18 +92,12 @@ type dataReturnType = {
 const ProductForm = Vue.extend({
   props: {
     propsProduct: {
-      type: Object as PropType<ProductFormFields>,
+      type: Object as PropType<Product>,
       required: false,
     },
   },
   data(): dataReturnType {
     return {
-      produto: {
-        nome: "",
-        valor: "",
-        quantidadeEstoque: "",
-        observacao: "",
-      },
       rules: {
         required: (value: string) => !!value || "Campo obrigatório",
         shouldBeNumber: (value: string) =>
@@ -93,12 +105,38 @@ const ProductForm = Vue.extend({
         positivePrice: (value: string) =>
           parseFloat(value) > 0 || "Valor deve ser positivo",
         minLength: (value: string) =>
-          value.length >= 3 || "Mínimo de 3 caracteres",
+          value?.length >= 3 || "Mínimo de 3 caracteres",
         maxLength: (value: string) =>
-          value.length <= 255 || "Máximo de 255 caracteres",
+          value?.length <= 255 || "Máximo de 255 caracteres",
       },
       valid: false,
     };
+  },
+  computed: {
+    computedProduto: {
+      get(): Product {
+        if (this.propsProduct) {
+          return {
+            ...this.propsProduct,
+            valor: this.propsProduct.valor
+              ? this.propsProduct.valor
+                  .toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })
+                  .replace("R$", "")
+              : "",
+          };
+        } else {
+          return {
+            nome: "",
+            valor: "",
+            quantidadeEstoque: "",
+            observacao: "",
+          };
+        }
+      },
+    },
   },
   methods: {
     submit() {
@@ -111,19 +149,21 @@ const ProductForm = Vue.extend({
         return;
       }
 
+      const valor = (this.computedProduto.valor as string).replace(",", ".");
+
       const apiProduct: Omit<ApiProduct, "id" | "dataCadastro"> = {
-        ...this.produto,
-        valor: parseFloat(this.produto.valor),
-        quantidadeEstoque: parseInt(this.produto.quantidadeEstoque),
+        ...this.computedProduto,
+        valor: Number(valor),
+        quantidadeEstoque: Number(this.computedProduto.quantidadeEstoque),
       };
 
-      createProduct(apiProduct);
+      this.$emit("submit", apiProduct);
     },
     reset() {
-      this.produto = {
+      this.computedProduto = {
         nome: "",
-        valor: "",
-        quantidadeEstoque: "",
+        valor: null,
+        quantidadeEstoque: null,
         observacao: "",
       };
 
