@@ -38,10 +38,10 @@ const CrudTable = Vue.extend({
   },
   methods: {
     editItem(item: unknown) {
-      console.log(">> editItem", item);
+      this.$emit("edit-item", item);
     },
     deleteItem(item: unknown) {
-      console.log(">> deleteItem", item);
+      this.$emit("delete-item", item);
     },
   },
 });
