@@ -9,10 +9,7 @@
           <v-list-item-title>Clientes</v-list-item-title>
         </v-list-item>
         <v-list-item link to="/profile">
-          <v-list-item-icon>
-            <v-icon>mdi-account</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Perfil</v-list-item-title>
+          <v-list-item-title>Meu perfil</v-list-item-title>
         </v-list-item>
         <v-list-item link to="/logout">
           <v-list-item-icon>
