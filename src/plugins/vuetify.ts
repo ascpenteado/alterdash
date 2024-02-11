@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuetify from "vuetify/lib/framework";
+import pt from "vuetify/src/locale/pt";
 import { VuetifyPreset } from "vuetify/types";
 import { isDarkModePreferredByUser } from "@/utils/isDarkModePreferredByUser";
 
@@ -51,8 +52,8 @@ export const preset: VuetifyPreset = {
     },
   },
   lang: {
-    current: "pt-BR",
-    locales: { "pt-BR": {} },
+    current: "pt",
+    locales: { pt },
     // eslint-disable-next-line
     t: undefined as any,
   },
