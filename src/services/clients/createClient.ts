@@ -1,6 +1,6 @@
 import router from "@/router";
 import { apiClient } from "@/services/api.service";
-import { getToken } from "@/utils/manageToken";
+import { useStorage } from "@/utils/useStorage";
 import { ApiClientData } from "@/types/clients.types";
 import store, { SnackbarMutation } from "@/store";
 
@@ -9,8 +9,9 @@ type ClientPayload = Omit<ApiClientData, "id">;
 export const createClient = async (
   product: Omit<ApiClientData, "id" | "dataCadastro">
 ) => {
+  const { get } = useStorage();
   try {
-    const token = getToken();
+    const token = get("token");
     if (!token) return;
 
     const payload: ClientPayload = {

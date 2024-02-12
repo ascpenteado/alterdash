@@ -1,15 +1,17 @@
 import router from "@/router";
 import { apiClient } from "@/services/api.service";
 import { ApiProduct, Product } from "@/types/product.types";
-import { getToken } from "../../utils/manageToken";
+import { useStorage } from "../../utils/useStorage";
 import store, { SnackbarMutation } from "@/store";
 
 type ProductPayload = Omit<Product, "id">;
 
 export const editProduct = async (product: Product) => {
+  const { get } = useStorage();
+
   try {
     if (!product.id) return;
-    const token = getToken();
+    const token = get("token");
     if (!token) return;
 
     const payload: ProductPayload = {

@@ -12,6 +12,7 @@ import Vue from "vue";
 import { ViewToolbar, ClientForm } from "@/components";
 import { ApiClientData } from "@/types/clients.types";
 import { getClientById } from "@/services/clients/getClientById";
+import { editClient } from "@/services/clients/editClient";
 
 const ViewProduct = Vue.extend({
   components: {
@@ -43,7 +44,7 @@ const ViewProduct = Vue.extend({
   methods: {
     async updateClient(client: ApiClientData) {
       console.log("client", client);
-      // editClient(client);
+      editClient(client);
     },
   },
 });

@@ -2,7 +2,7 @@ import store, { SnackbarMutation, UserMutation } from "@/store";
 import router from "../router";
 
 import { ObjetoUsuario } from "../types/users.types";
-import { setToken } from "../utils/manageToken";
+import { useStorage } from "../utils/useStorage";
 import { apiClient } from "./api.service";
 
 type LoginPayload = {
@@ -11,6 +11,7 @@ type LoginPayload = {
 };
 
 export const apiLogin = async (email: string, password: string) => {
+  const { set } = useStorage();
   try {
     const res = await apiClient.post<ObjetoUsuario, LoginPayload>({
       url: "/login",
@@ -24,12 +25,12 @@ export const apiLogin = async (email: string, password: string) => {
       store.commit(UserMutation.SetEmail, res.usuario.email);
       store.commit(UserMutation.SetName, res.usuario.nome);
       store.commit(UserMutation.SetPhoto, res.usuario.foto);
-      setToken(res.token);
-      localStorage.setItem("id", res.usuario.id.toString());
+      set("token", res.token);
+      set("id", res.usuario.id.toString());
       router.push("/");
     }
   } catch (error) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((error as any).code === "ERR_NETWORK") {
       store.commit(SnackbarMutation.ShowSnackbar, {
         message: "Erro de conexão com a API",

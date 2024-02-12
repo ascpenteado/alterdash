@@ -1,11 +1,12 @@
 import { apiClient } from "@/services/api.service";
 import { ApiProduct } from "@/types/product.types";
-import { getToken } from "../../utils/manageToken";
+import { useStorage } from "../../utils/useStorage";
 import store, { SnackbarMutation } from "@/store";
 
 export const getProductById = async (productId: string) => {
   try {
-    const token = getToken();
+    const { get } = useStorage();
+    const token = get("token");
     if (!token) return;
 
     const id = parseInt(productId);

@@ -1,15 +1,17 @@
 import router from "@/router";
 import { apiClient } from "@/services/api.service";
-import { getToken } from "@/utils/manageToken";
+import { useStorage } from "@/utils/useStorage";
 import { ApiClientData } from "@/types/clients.types";
 import store, { SnackbarMutation } from "@/store";
 
 type ClientPayload = Omit<ApiClientData, "id">;
 
-export const editProduct = async (client: ApiClientData) => {
+export const editClient = async (client: ApiClientData) => {
+  const { get } = useStorage();
+
   try {
     if (!client.id) return;
-    const token = getToken();
+    const token = get("token");
     if (!token) return;
 
     const payload: ClientPayload = {
@@ -18,17 +20,17 @@ export const editProduct = async (client: ApiClientData) => {
     };
 
     const res = await apiClient.put<ApiClientData, ClientPayload>({
-      url: `/produtos/${client.id}`,
+      url: `/clientes/${client.id}`,
       headers: { Authorization: token },
       data: payload,
     });
     if (res.id) {
       store.commit(SnackbarMutation.ShowSnackbar, {
-        message: "Produto atualizado com sucesso",
+        message: "Cliente atualizado com sucesso",
         color: "success",
       });
 
-      router.push("/products");
+      router.push("/clients");
     }
   } catch (error) {
     store.commit(SnackbarMutation.ShowSnackbar, {

@@ -1,11 +1,14 @@
 import router from "@/router";
-import { getToken, removeToken } from "@/utils/manageToken";
+import { useStorage } from "@/utils/useStorage";
 import { apiClient } from "@/services/api.service";
 import { ApiClientData } from "@/types/clients.types";
+import store, { SnackbarMutation } from "@/store";
 
 export async function getClients() {
+  const { get } = useStorage();
+
   try {
-    const token = getToken();
+    const token = get("token");
     if (!token) {
       router.push("/login");
       return;
@@ -14,11 +17,11 @@ export async function getClients() {
       url: "/clientes",
       headers: { Authorization: token },
     });
-  } catch (error: unknown) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((error as any).response.status === 401) {
-      removeToken();
-      router.push("/login");
-    }
+  } catch (error) {
+    store.commit(SnackbarMutation.ShowSnackbar, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      message: (error as any).response?.data.mensagem,
+      color: "error",
+    });
   }
 }

@@ -1,7 +1,8 @@
-import { removeToken } from "../utils/manageToken";
+import { useStorage } from "../utils/useStorage";
 
 export const logout = async () => {
-  removeToken();
+  const { remove } = useStorage();
+  remove("token");
   localStorage.removeItem("id");
   localStorage.removeItem("theme");
   window.location.href = "/login";

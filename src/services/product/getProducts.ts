@@ -1,11 +1,13 @@
 import router from "@/router";
 import { ApiProduct } from "@/types/product.types";
-import { getToken, removeToken } from "@/utils/manageToken";
+import { useStorage } from "@/utils/useStorage";
 import { apiClient } from "@/services/api.service";
+import store, { SnackbarMutation } from "@/store";
 
 export async function getProducts() {
+  const { get } = useStorage();
   try {
-    const token = getToken();
+    const token = get("token");
     if (!token) {
       router.push("/login");
       return;
@@ -14,11 +16,11 @@ export async function getProducts() {
       url: "/produtos",
       headers: { Authorization: token },
     });
-  } catch (error: unknown) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((error as any).response.status === 401) {
-      removeToken();
-      router.push("/login");
-    }
+  } catch (error) {
+    store.commit(SnackbarMutation.ShowSnackbar, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      message: (error as any).response?.data.mensagem,
+      color: "error",
+    });
   }
 }

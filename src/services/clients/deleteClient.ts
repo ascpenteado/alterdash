@@ -1,13 +1,15 @@
 import { apiClient } from "@/services/api.service";
-import { getToken } from "@/utils/manageToken";
+import { useStorage } from "@/utils/useStorage";
 import { ApiClientData } from "@/types/clients.types";
 import store, { SnackbarMutation } from "@/store";
 
 export const deleteClient = async (clientId: number) => {
+  const { get } = useStorage();
+
   try {
     if (!clientId) return;
 
-    const token = getToken();
+    const token = get("token");
     if (!token) return;
 
     await apiClient.delete<ApiClientData>({

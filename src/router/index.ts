@@ -3,11 +3,12 @@ import VueRouter, { RouteConfig } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import DefaultLayout from "../layouts/DefaultLayout.vue";
 import { productRoutes } from "./product.routes";
-import { getToken } from "../utils/manageToken";
+import { useStorage } from "../utils/useStorage";
 import { validateMD5Hash } from "../utils/validateMd5Hash";
 import { clientRoutes } from "./client.routes";
 
 Vue.use(VueRouter);
+const { get } = useStorage();
 
 const routes: Array<RouteConfig> = [
   {
@@ -49,7 +50,7 @@ const routes: Array<RouteConfig> = [
 const router = new VueRouter({ routes, mode: "history" });
 
 router.beforeEach((to, _, next) => {
-  const token = getToken() ?? "";
+  const token = get("token") ?? "";
   const isAuthenticated = validateMD5Hash(token);
   const isLoginPage = to.name === "login";
 
