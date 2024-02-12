@@ -2,14 +2,22 @@
   <v-container>
     <view-toolbar title="Produtos" addUrl="/products/new"></view-toolbar>
 
-    <crud-table
-      v-if="products.length > 0"
-      :items="products"
-      :tableHeaders="tableHeaders"
-      v-on:edit-item="editItem"
-      v-on:delete-item="deleteItem"
-    ></crud-table>
-    <empty-content v-else></empty-content>
+    <v-skeleton-loader
+      v-if="loading"
+      class="mx-auto"
+      type="table"
+      transition="fade-transition"
+    ></v-skeleton-loader>
+    <template v-else>
+      <crud-table
+        v-if="products.length > 0"
+        :items="products"
+        :tableHeaders="tableHeaders"
+        v-on:edit-item="editItem"
+        v-on:delete-item="deleteItem"
+      ></crud-table>
+      <empty-content v-else></empty-content>
+    </template>
   </v-container>
 </template>
 
@@ -28,6 +36,7 @@ type DataReturnType = {
   products: Product[];
   token: string | null;
   tableHeaders: { text: string; value: string; sortable?: boolean }[];
+  loading: boolean;
 };
 
 const ListProducts = Vue.extend({
@@ -42,6 +51,7 @@ const ListProducts = Vue.extend({
       products: [] as Product[],
       token: null as string | null,
       tableHeaders: [{ text: "", value: "", sortable: false }],
+      loading: false,
     };
   },
   methods: {
@@ -56,11 +66,15 @@ const ListProducts = Vue.extend({
     },
   },
   async created() {
+    this.loading = true;
     const res = await getProducts();
     if (!res?.length) return;
 
     this.products = buildProducts(res);
     this.tableHeaders = productTableHeaders;
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
   },
 });
 

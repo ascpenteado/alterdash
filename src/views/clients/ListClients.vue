@@ -10,7 +10,6 @@
     ></v-skeleton-loader>
     <template v-else>
       <crud-table
-        transition="fade-transition"
         v-if="clients.length > 0"
         :items="clients"
         :tableHeaders="tableHeaders"
@@ -77,7 +76,7 @@ const ListClients = Vue.extend({
     this.tableHeaders = clientsTableHeaders;
     setTimeout(() => {
       this.loading = false;
-    }, 1000);
+    }, 500);
   },
 });
 
