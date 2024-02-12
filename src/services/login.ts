@@ -25,22 +25,31 @@ export const apiLogin = async (email: string, password: string) => {
       store.commit(UserMutation.SetEmail, res.usuario.email);
       store.commit(UserMutation.SetName, res.usuario.nome);
       store.commit(UserMutation.SetPhoto, res.usuario.foto);
+
       set("token", res.token);
       set("id", res.usuario.id.toString());
+
       router.push("/");
     }
-  } catch (error) {
     //eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((error as any).code === "ERR_NETWORK") {
+  } catch (error: any) {
+    if (error.code) {
+      if (error.code === "ERR_NETWORK") {
+        store.commit(SnackbarMutation.ShowSnackbar, {
+          message: "Erro de conexão com a API",
+          color: "error",
+        });
+        return;
+      }
+
       store.commit(SnackbarMutation.ShowSnackbar, {
-        message: "Erro de conexão com a API",
+        message: error.message,
         color: "error",
       });
-      return;
     }
+
     store.commit(SnackbarMutation.ShowSnackbar, {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      message: (error as any).response?.data.mensagem,
+      message: error.response?.data.mensagem,
       color: "error",
     });
   }
