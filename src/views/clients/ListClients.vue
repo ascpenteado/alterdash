@@ -63,10 +63,6 @@ const ListClients = Vue.extend({
       try {
         await deleteClient(client.id);
         this.$router.go(0);
-        store.commit(SnackbarMutation.ShowSnackbar, {
-          message: "Cliente excluído com sucesso",
-          color: "success",
-        });
       } catch (error) {
         store.commit(SnackbarMutation.ShowSnackbar, {
           message: "Erro ao excluir cliente",
