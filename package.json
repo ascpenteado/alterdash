@@ -13,11 +13,11 @@
     "chart.js": "^4.4.1",
     "core-js": "^3.8.3",
     "maska": "^2.1.11",
-    "vee-validate": "3",
     "vue": "^2.7.16",
     "vue-chartjs": "^5.3.0",
     "vue-router": "^3.5.1",
-    "vuetify": "^2.7.1"
+    "vuetify": "^2.7.1",
+    "vuex": "^3"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.41",

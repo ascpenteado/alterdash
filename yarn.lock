@@ -8037,11 +8037,6 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
-vee-validate@3:
-  version "3.4.15"
-  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-3.4.15.tgz#d1b2fe2120d28bd833efadce15d73b482f6f7bcb"
-  integrity sha512-qEtvq9X2N7l5pjBe/6YGrrIBHxJA4KTrb3QrER3qzM7fzkH730m8LyVWMIzM47l//618nlUa7VvTdMFTRKr8tQ==
-
 vue-chartjs@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/vue-chartjs/-/vue-chartjs-5.3.0.tgz#59920a07d72f37a2375d495256e486b92813bf6e"
@@ -8132,6 +8127,11 @@ vuetify@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.7.1.tgz#49fc4d460ecfb51ed40d5befff779ceabf4f5a03"
   integrity sha512-DVFmRsDtYrITw9yuGLwpFWngFYzEgk0KwloDCIV3+vhZw+NBFJOSzdbttbYmOwtqvQlhDxUyIRQolrRbSFAKlg==
+
+vuex@^3:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.6.2.tgz#236bc086a870c3ae79946f107f16de59d5895e71"
+  integrity sha512-ETW44IqCgBpVomy520DT5jf8n0zoCac+sxWnn+hMe/CzaSejb/eVw2YToiXYX+Ex/AuHHia28vWTq4goAexFbw==
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"
