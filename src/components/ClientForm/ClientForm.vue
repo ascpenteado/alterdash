@@ -150,7 +150,7 @@ const ClientForm = Vue.extend({
       if (!this.valid) {
         store.commit(SnackbarMutation.ShowSnackbar, {
           message: "Preencha os campos corretamente",
-          type: "error",
+          color: "error",
         });
         return;
       }
