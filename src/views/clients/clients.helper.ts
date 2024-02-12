@@ -1,3 +1,20 @@
+import { ApiClientData } from "@/types/clients.types";
+import { Mask } from "maska";
+
+export const formatClients = (clients: ApiClientData[]) => {
+  const cpfCnpjMask = new Mask({
+    mask: ["###.###.###-##", "##.###.###/####-##"],
+  });
+  const phoneMask = new Mask({ mask: ["(##) ####-####", "(##) #####-####"] });
+
+  return clients.map((client) => {
+    return {
+      ...client,
+      cpfOuCnpj: cpfCnpjMask.masked(client.cpfOuCnpj),
+      telefone: phoneMask.masked(client.telefone),
+    };
+  });
+};
 export const clientsTableHeaders = [
   {
     text: "ID",

@@ -1,7 +1,7 @@
 import { apiClient } from "@/services/api.service";
-import { useStorage } from "../../utils/useStorage";
 import { ApiClientData } from "@/types/clients.types";
-import store, { SnackbarMutation } from "@/store";
+import { handleErrors } from "@/utils/handleErrors";
+import { useStorage } from "../../utils/useStorage";
 
 export const getClientById = async (clientId: string) => {
   const { get } = useStorage();
@@ -18,10 +18,6 @@ export const getClientById = async (clientId: string) => {
     });
     if (res.id) return res;
   } catch (error) {
-    store.commit(SnackbarMutation.ShowSnackbar, {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      message: (error as any).response?.data.mensagem,
-      color: "error",
-    });
+    handleErrors(error);
   }
 };

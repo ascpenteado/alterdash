@@ -3,6 +3,7 @@ import { apiClient } from "@/services/api.service";
 import { ApiProduct } from "@/types/product.types";
 import { useStorage } from "../../utils/useStorage";
 import store, { SnackbarMutation } from "@/store";
+import { handleErrors } from "@/utils/handleErrors";
 
 type ProductPayload = Omit<ApiProduct, "id">;
 
@@ -30,14 +31,11 @@ export const createProduct = async (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         message: "Produto criado com sucesso",
         color: "success",
+        timeout: 1000,
       });
       router.push("/products");
     }
   } catch (error) {
-    store.commit(SnackbarMutation.ShowSnackbar, {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      message: (error as any).response?.data.mensagem,
-      color: "error",
-    });
+    handleErrors(error);
   }
 };

@@ -2,7 +2,7 @@ import router from "@/router";
 import { useStorage } from "@/utils/useStorage";
 import { apiClient } from "@/services/api.service";
 import { ApiClientData } from "@/types/clients.types";
-import store, { SnackbarMutation } from "@/store";
+import { handleErrors } from "@/utils/handleErrors";
 
 export async function getClients() {
   const { get } = useStorage();
@@ -18,10 +18,6 @@ export async function getClients() {
       headers: { Authorization: token },
     });
   } catch (error) {
-    store.commit(SnackbarMutation.ShowSnackbar, {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      message: (error as any).response?.data.mensagem,
-      color: "error",
-    });
+    handleErrors(error);
   }
 }

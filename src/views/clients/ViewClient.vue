@@ -43,7 +43,6 @@ const ViewProduct = Vue.extend({
   },
   methods: {
     async updateClient(client: ApiClientData) {
-      console.log("client", client);
       editClient(client);
     },
   },

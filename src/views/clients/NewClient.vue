@@ -19,7 +19,10 @@ const NewClient = Vue.extend({
   },
   methods: {
     async create(client: Omit<ApiClientData, "id" | "dataCadastro">) {
-      createClient(client);
+      const newDate = new Date().toISOString();
+      const newClient = { ...client, dataCadastro: newDate };
+
+      createClient(newClient);
     },
   },
 });

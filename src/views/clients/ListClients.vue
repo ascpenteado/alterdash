@@ -28,7 +28,7 @@ import router from "@/router";
 import { CrudTable, EmptyContent, ViewToolbar } from "@/components";
 import { getClients } from "@/services/clients/getClients";
 import { ApiClientData } from "@/types/clients.types";
-import { clientsTableHeaders } from "./clients.helper";
+import { clientsTableHeaders, formatClients } from "./clients.helper";
 import { deleteClient } from "@/services/clients/deleteClient";
 import store, { SnackbarMutation } from "@/store";
 
@@ -74,8 +74,18 @@ const ListClients = Vue.extend({
   async created() {
     this.loading = true;
     const res = await getClients();
-    this.clients = res ?? [];
+
+    if (!res) {
+      this.loading = false;
+      return;
+    }
+
+    const clients = formatClients(res);
+
+    this.clients = clients;
+
     this.tableHeaders = clientsTableHeaders;
+
     setTimeout(() => {
       this.loading = false;
     }, 500);

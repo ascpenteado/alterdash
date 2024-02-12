@@ -4,6 +4,7 @@ import router from "../router";
 import { ObjetoUsuario } from "../types/users.types";
 import { useStorage } from "../utils/useStorage";
 import { apiClient } from "./api.service";
+import { handleErrors } from "@/utils/handleErrors";
 
 type LoginPayload = {
   email: string;
@@ -31,26 +32,7 @@ export const apiLogin = async (email: string, password: string) => {
 
       router.push("/");
     }
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    if (error.code) {
-      if (error.code === "ERR_NETWORK") {
-        store.commit(SnackbarMutation.ShowSnackbar, {
-          message: "Erro de conexão com a API",
-          color: "error",
-        });
-        return;
-      }
-
-      store.commit(SnackbarMutation.ShowSnackbar, {
-        message: error.message,
-        color: "error",
-      });
-    }
-
-    store.commit(SnackbarMutation.ShowSnackbar, {
-      message: error.response?.data.mensagem,
-      color: "error",
-    });
+  } catch (error) {
+    handleErrors(error);
   }
 };

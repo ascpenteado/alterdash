@@ -3,6 +3,7 @@ import { ApiProduct } from "@/types/product.types";
 import { useStorage } from "@/utils/useStorage";
 import { apiClient } from "@/services/api.service";
 import store, { SnackbarMutation } from "@/store";
+import { handleErrors } from "@/utils/handleErrors";
 
 export async function getProducts() {
   const { get } = useStorage();
@@ -17,10 +18,6 @@ export async function getProducts() {
       headers: { Authorization: token },
     });
   } catch (error) {
-    store.commit(SnackbarMutation.ShowSnackbar, {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      message: (error as any).response?.data.mensagem,
-      color: "error",
-    });
+    handleErrors(error);
   }
 }

@@ -40,6 +40,7 @@
           :rules="[rules.required, rules.shouldBeNumber, rules.positivePrice]"
           required
           ref="valor"
+          v-maska="priceMaskOptions"
         ></v-text-field>
       </v-col>
       <v-col cols="6" sm="4">
@@ -82,6 +83,10 @@ type dataReturnType = {
   produto: Product;
   rules: Record<string, (value: string) => boolean | string>;
   valid: boolean;
+  priceMaskOptions: {
+    dataMask: string[];
+    placeholder: string;
+  };
 };
 
 const ProductForm = Vue.extend({
@@ -98,6 +103,11 @@ const ProductForm = Vue.extend({
         valor: "",
         quantidadeEstoque: "",
         observacao: "",
+      },
+
+      priceMaskOptions: {
+        dataMask: ["R$ #.##0,00"],
+        placeholder: "R$ 0,00",
       },
 
       rules: {
