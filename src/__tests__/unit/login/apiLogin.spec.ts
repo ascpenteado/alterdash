@@ -1,51 +1,159 @@
-import { apiLogin } from "@/services/login";
-import { apiClient } from "@/services/api.service";
 import router from "@/router";
-import { bindMockToWindow, storageMock } from "@/utils/useStorageMock";
+import { apiClient } from "@/services/api.service";
+import { apiLogin } from "@/services/login";
+import store, { SnackbarMutation } from "@/store";
 
-bindMockToWindow("localStorage");
+jest.mock("@/services/api.service", () => ({
+  apiClient: {
+    post: jest.fn(),
+  },
+}));
 
-jest.mock("../../../services/api.service");
-jest.mock("../../../router");
+jest.mock("@/router", () => ({
+  push: jest.fn(),
+}));
 
-describe("apiLogin", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    storageMock.clear();
-  });
+describe("Login", () => {
+  test("should login successfully when valid email and password are provided", async () => {
+    // arrange
+    const email = "test@example.com";
+    const password = "password123";
+    const res = {
+      token: "token123",
+      usuario: {
+        email: "test@example.com",
+        nome: "Test User",
+        foto: "user.jpg",
+        id: 1,
+      },
+    };
+    const apiClientMock = jest.mocked(apiClient.post).mockResolvedValue(res);
 
-  it("should call apiClient.post with correct parameters", async () => {
-    const postSpy = jest
-      .spyOn(apiClient, "post")
-      .mockResolvedValueOnce({ token: "mockedToken" });
+    // act
+    await apiLogin(email, password);
 
-    await apiLogin("test@example.com", "password");
-
-    expect(postSpy).toHaveBeenCalledWith("/login", {
-      email: "test@example.com",
-      senha: "password",
+    // assert
+    expect(apiClientMock).toHaveBeenCalledWith({
+      data: { email, senha: password },
+      url: "/login",
     });
   });
 
-  it("should set token in localStorage and redirect to '/' if login is successful", async () => {
-    jest
-      .spyOn(apiClient, "post")
-      .mockResolvedValueOnce({ token: "mockedToken" });
-    const pushSpy = jest.spyOn(router, "push");
+  test("should redirect user to home after successfully login", async () => {
+    // arrange
+    const email = "test@example.com";
+    const password = "password123";
+    const res = {
+      token: "token123",
+      usuario: {
+        email: "test@example.com",
+        nome: "Test User",
+        foto: "user.jpg",
+        id: 1,
+      },
+    };
+    const apiClientMock = jest.mocked(apiClient.post).mockResolvedValue(res);
+    const routerPushMock = jest.mocked(router.push);
 
-    await apiLogin("test@example.com", "password");
+    // act
+    await apiLogin(email, password);
 
-    expect(storageMock.setItem).toHaveBeenCalledWith("token", "mockedToken");
-    expect(pushSpy).toHaveBeenCalledWith("/");
+    // assert
+    expect(apiClientMock).toHaveBeenCalledWith({
+      data: { email, senha: password },
+      url: "/login",
+    });
+    expect(routerPushMock).toHaveBeenCalledWith("/");
   });
 
-  it("should not set token in localStorage or redirect if login fails", async () => {
-    jest.spyOn(apiClient, "post").mockResolvedValueOnce(null);
-    const pushSpy = jest.spyOn(router, "push");
+  test("should set user data in store when login is successful", async () => {
+    // arrange
+    const email = "test@example.com";
+    const password = "password123";
+    const res = {
+      token: "token123",
+      usuario: {
+        email: "test@example.com",
+        nome: "Test User",
+        foto: "user.jpg",
+        id: 1,
+      },
+    };
+    const apiClientMock = jest.mocked(apiClient.post).mockResolvedValue(res);
 
-    await apiLogin("test@example.com", "password");
+    // act
+    await apiLogin(email, password);
 
-    expect(storageMock.setItem).not.toHaveBeenCalled();
-    expect(pushSpy).not.toHaveBeenCalled();
+    // assert
+    expect(apiClientMock).toHaveBeenCalledWith({
+      data: { email, senha: password },
+      url: "/login",
+    });
+
+    expect(store.state.user.email).toBe(res.usuario.email);
+    expect(store.state.user.nome).toBe(res.usuario.nome);
+    expect(store.state.user.foto).toBe(res.usuario.foto);
+  });
+
+  test("should set 'token' and 'id' into localStorage after login", async () => {
+    // arrange
+    const email = "test@example.com";
+    const password = "password123";
+    const res = {
+      token: "token123",
+      usuario: {
+        email: "test@example.com",
+        nome: "Test User",
+        foto: "user.jpg",
+        id: 1,
+      },
+    };
+    const apiClientMock = jest.mocked(apiClient.post).mockResolvedValue(res);
+
+    // act
+    await apiLogin(email, password);
+
+    // assert
+    expect(apiClientMock).toHaveBeenCalledWith({
+      data: { email, senha: password },
+      url: "/login",
+    });
+
+    expect(localStorage.getItem("token")).toBe(res.token);
+    expect(localStorage.getItem("id")).toBe(res.usuario.id.toString());
+  });
+
+  test("should show error message when login fails", async () => {
+    // arrange
+    const email = "test@example.com";
+    const password = "password123";
+    const error = {
+      response: {
+        data: {
+          mensagem: "Senha ou email inválidos",
+        },
+      },
+    };
+    const apiClientMock = jest.mocked(apiClient.post).mockRejectedValue(error);
+    const storeCommitMock = jest.spyOn(store, "commit");
+
+    // act
+    await apiLogin(email, password);
+
+    // assert
+    expect(apiClientMock).toHaveBeenCalledWith({
+      data: { email, senha: password },
+      url: "/login",
+    });
+
+    expect(storeCommitMock).toHaveBeenCalledWith(
+      SnackbarMutation.ShowSnackbar,
+      {
+        message: "Senha ou email inválidos",
+        color: "error",
+      }
+    );
+
+    expect(storeCommitMock).toHaveBeenCalledTimes(1);
   });
 });
