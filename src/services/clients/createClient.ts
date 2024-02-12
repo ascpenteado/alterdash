@@ -29,6 +29,7 @@ export const createClient = async (client: Omit<ApiClientData, "id">) => {
       store.commit(SnackbarMutation.ShowSnackbar, {
         message: "Cliente criado com sucesso",
         color: "success",
+        timeout: 1000,
       });
       router.push("/clients");
       return res;

@@ -1,9 +1,8 @@
 import router from "@/router";
-import { ApiProduct } from "@/types/product.types";
-import { useStorage } from "@/utils/useStorage";
 import { apiClient } from "@/services/api.service";
-import store, { SnackbarMutation } from "@/store";
+import { ApiProduct } from "@/types/product.types";
 import { handleErrors } from "@/utils/handleErrors";
+import { useStorage } from "@/utils/useStorage";
 
 export async function getProducts() {
   const { get } = useStorage();

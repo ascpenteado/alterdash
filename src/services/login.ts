@@ -1,10 +1,10 @@
-import store, { SnackbarMutation, UserMutation } from "@/store";
+import store, { UserMutation } from "@/store";
 import router from "../router";
 
+import { handleErrors } from "@/utils/handleErrors";
 import { ObjetoUsuario } from "../types/users.types";
 import { useStorage } from "../utils/useStorage";
 import { apiClient } from "./api.service";
-import { handleErrors } from "@/utils/handleErrors";
 
 type LoginPayload = {
   email: string;

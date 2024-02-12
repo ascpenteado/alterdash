@@ -28,6 +28,7 @@ export const editProduct = async (product: Product) => {
       store.commit(SnackbarMutation.ShowSnackbar, {
         message: "Produto atualizado com sucesso",
         color: "success",
+        timeout: 1000,
       });
       router.push("/products");
     }
