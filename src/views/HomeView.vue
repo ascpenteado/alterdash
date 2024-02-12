@@ -126,6 +126,7 @@ export default Vue.extend({
         return 0;
       });
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     topStockProductsChartData(): any {
       return {
         labels: this.topStockProducts.map((product) => product.nome),
@@ -147,6 +148,7 @@ export default Vue.extend({
         return Number(product.quantidadeEstoque) <= 0;
       });
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     zeroOrNegativeProductsChartData(): any {
       return {
         labels: this.zeroOrNegativeStockProducts.map((product) => product.nome),

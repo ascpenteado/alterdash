@@ -1,8 +1,8 @@
 import router from "@/router";
-import { showSnackbar } from "@/store/snackBar/snackBar.state";
 import { apiClient } from "@/services/api.service";
 import { ApiProduct } from "@/types/product.types";
 import { getToken } from "../../utils/manageToken";
+import store, { SnackbarMutation } from "@/store";
 
 type ProductPayload = Omit<ApiProduct, "id">;
 
@@ -24,11 +24,18 @@ export const createProduct = async (
       data: payload,
     });
     if (res.id) {
-      showSnackbar("Produto criado com sucesso", "success");
+      store.commit(SnackbarMutation.ShowSnackbar, {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        message: "Produto criado com sucesso",
+        color: "success",
+      });
       router.push("/products");
     }
   } catch (error) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    showSnackbar((error as any).response?.data.mensagem, "error");
+    store.commit(SnackbarMutation.ShowSnackbar, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      message: (error as any).response?.data.mensagem,
+      color: "error",
+    });
   }
 };

@@ -18,9 +18,9 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { showSnackbar } from "@/store/snackBar/snackBar.state";
 import { validateLoginFormFields } from "./LoginForm.helpers";
 import { apiLogin } from "@/services/login";
+import store from "@/store";
 
 const LoginForm = Vue.extend({
   data() {
@@ -33,7 +33,11 @@ const LoginForm = Vue.extend({
     async login() {
       const errors = validateLoginFormFields(this.email, this.password);
       if (errors?.length) {
-        return showSnackbar(errors, "error");
+        store.commit("snackbar/showSnackbar", {
+          message: errors,
+          color: "error",
+        });
+        return;
       }
 
       try {

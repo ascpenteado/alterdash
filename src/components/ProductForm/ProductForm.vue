@@ -75,8 +75,8 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
 import { ApiProduct, Product } from "@/types/product.types";
-import { showSnackbar } from "@/store/snackBar/snackBar.state";
 import { formValidationRules } from "@/utils/formValidationRules";
+import store, { SnackbarMutation } from "@/store";
 
 type dataReturnType = {
   produto: Product;
@@ -141,7 +141,11 @@ const ProductForm = Vue.extend({
       this.valid = formRef.validate();
 
       if (!this.valid) {
-        showSnackbar("Preencha os campos corretamente", "error");
+        store.commit(SnackbarMutation.ShowSnackbar, {
+          message: "Preencha os campos corretamente",
+          color: "error",
+        });
+
         return;
       }
 

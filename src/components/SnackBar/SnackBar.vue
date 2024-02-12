@@ -24,17 +24,17 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { state, hideSnackbar } from "../../store/snackBar/snackBar.state";
+import store, { SnackbarMutation } from "@/store";
 
 const SnackBar = Vue.extend({
   data() {
     return {
-      state,
+      state: store.state.snackbar,
     };
   },
   methods: {
     hideSnackbar() {
-      hideSnackbar();
+      store.commit(SnackbarMutation.HideSnackbar);
     },
   },
 });

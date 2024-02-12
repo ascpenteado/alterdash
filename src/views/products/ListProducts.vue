@@ -29,8 +29,8 @@ import { getProducts } from "@/services/product/getProducts";
 import router from "@/router";
 import { Product } from "@/types/product.types";
 import { deleteProduct } from "@/services/product/deleteProduct";
-import { showSnackbar } from "../../store/snackBar/snackBar.state";
 import { buildProducts, productTableHeaders } from "./product.helper";
+import store, { SnackbarMutation } from "@/store";
 
 type DataReturnType = {
   products: Product[];
@@ -62,7 +62,10 @@ const ListProducts = Vue.extend({
       if (!item.id) return;
       await deleteProduct(item.id);
       this.$router.go(0);
-      showSnackbar("Produto excluído com sucesso", "success");
+      store.commit(SnackbarMutation.ShowSnackbar, {
+        message: "Produto excluído com sucesso",
+        color: "success",
+      });
     },
   },
   async created() {

@@ -30,7 +30,7 @@ import { getClients } from "@/services/clients/getClients";
 import { ApiClientData } from "@/types/clients.types";
 import { clientsTableHeaders } from "./clients.helper";
 import { deleteClient } from "@/services/clients/deleteClient";
-import { showSnackbar } from "@/store/snackBar/snackBar.state";
+import store, { SnackbarMutation } from "@/store";
 
 type DataReturnType = {
   clients: ApiClientData[];
@@ -63,9 +63,15 @@ const ListClients = Vue.extend({
       try {
         await deleteClient(client.id);
         this.$router.go(0);
-        showSnackbar("Cliente excluído com sucesso", "success");
+        store.commit(SnackbarMutation.ShowSnackbar, {
+          message: "Cliente excluído com sucesso",
+          color: "success",
+        });
       } catch (error) {
-        showSnackbar("Erro ao excluir cliente", "error");
+        store.commit(SnackbarMutation.ShowSnackbar, {
+          message: "Erro ao excluir cliente",
+          color: "error",
+        });
       }
     },
   },

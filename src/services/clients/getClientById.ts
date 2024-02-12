@@ -1,7 +1,7 @@
-import { showSnackbar } from "@/store/snackBar/snackBar.state";
 import { apiClient } from "@/services/api.service";
 import { getToken } from "../../utils/manageToken";
 import { ApiClientData } from "@/types/clients.types";
+import store, { SnackbarMutation } from "@/store";
 
 export const getClientById = async (clientId: string) => {
   try {
@@ -16,7 +16,10 @@ export const getClientById = async (clientId: string) => {
     });
     if (res.id) return res;
   } catch (error) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    showSnackbar((error as any).response?.data.mensagem, "error");
+    store.commit(SnackbarMutation.ShowSnackbar, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      message: (error as any).response?.data.mensagem,
+      color: "error",
+    });
   }
 };

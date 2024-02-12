@@ -89,7 +89,7 @@
 import Vue, { PropType } from "vue";
 import { ApiClientData } from "../../types/clients.types";
 import { formValidationRules } from "../../utils/formValidationRules";
-import { showSnackbar } from "@/store/snackBar/snackBar.state";
+import store, { SnackbarMutation } from "@/store";
 
 type dataReturnType = {
   client: Omit<ApiClientData, "id">;
@@ -148,7 +148,10 @@ const ClientForm = Vue.extend({
       this.valid = formRef.validate();
 
       if (!this.valid) {
-        showSnackbar("Preencha os campos corretamente", "error");
+        store.commit(SnackbarMutation.ShowSnackbar, {
+          message: "Preencha os campos corretamente",
+          type: "error",
+        });
         return;
       }
 

@@ -1,5 +1,6 @@
+import store, { SnackbarMutation } from "@/store";
 import router from "../router";
-import { showSnackbar } from "../store/snackBar/snackBar.state";
+
 import { ObjetoUsuario } from "../types/users.types";
 import { setToken } from "../utils/manageToken";
 import { apiClient } from "./api.service";
@@ -26,10 +27,16 @@ export const apiLogin = async (email: string, password: string) => {
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((error as any).code === "ERR_NETWORK") {
-      showSnackbar("Erro de conexão com a API", "error");
+      store.commit(SnackbarMutation.ShowSnackbar, {
+        message: "Erro de conexão com a API",
+        color: "error",
+      });
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    showSnackbar((error as any).response?.data.mensagem, "error");
+    store.commit(SnackbarMutation.ShowSnackbar, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      message: (error as any).response?.data.mensagem,
+      color: "error",
+    });
   }
 };
