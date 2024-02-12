@@ -14,6 +14,7 @@ const initialState: UserState = {
   themePreference: "system",
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const userModule: Module<UserState, any> = {
   state: initialState,
   mutations: {
