@@ -1,23 +1,45 @@
-import { logout } from "@/services/logout";
 import router from "@/router";
-import { bindMockToWindow, storageMock } from "@/utils/useStorageMock";
+import { apiClient } from "@/services/api.service";
+import { logout } from "@/services/logout";
 
-bindMockToWindow("localStorage");
-jest.mock("../../../router");
+jest.mock("../../../services/api.service.ts", () => ({
+  apiClient: {
+    delete: jest.fn(),
+  },
+}));
 
-describe("logout", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    storageMock.clear();
-  });
+jest.mock("../../../utils/useStorage.ts", () => ({
+  useStorage: jest.fn().mockReturnValue({
+    remove: jest.fn(),
+    get: jest.fn().mockReturnValue("mocked-token"),
+  }),
+}));
 
-  it("should remove token from localStorage and redirect to '/login' if there is a token", async () => {
-    storageMock.setItem("token", "mockedToken");
-    const pushSpy = jest.spyOn(router, "push");
+jest.mock("../../../router", () => ({
+  go: jest.fn(),
+}));
+
+describe("Logout", () => {
+  test("should logout successfully", async () => {
+    const logoutRes = {
+      mensagem: "Logout efetuado com sucesso!",
+    };
+    const apiClientMock = jest
+      .mocked(apiClient.delete)
+      .mockResolvedValue(logoutRes);
 
     await logout();
 
-    expect(storageMock.removeItem).toHaveBeenCalledWith("token");
-    expect(pushSpy).toHaveBeenCalledWith("/login");
+    expect(apiClientMock).toHaveBeenCalledWith({
+      url: "/logout",
+      headers: {
+        Authorization: "mocked-token",
+      },
+    });
+
+    expect(localStorage.getItem("token")).toBeNull();
+    expect(localStorage.getItem("id")).toBeNull();
+    expect(localStorage.getItem("theme")).toBeNull();
+    expect(router.go).toHaveBeenCalledWith(0);
   });
 });
