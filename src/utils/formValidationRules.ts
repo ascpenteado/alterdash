@@ -17,7 +17,7 @@ export const formValidationRules = {
   minLength: (value: string) => value?.length >= 3 || "Mínimo de 3 caracteres",
   maxLength: (value: string) =>
     value?.length <= 255 || "Máximo de 255 caracteres",
-  cpfOrCnpj: (value: string) => {
+  cpfOuCnpj: (value: string) => {
     const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
 
     const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
