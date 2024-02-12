@@ -8,6 +8,12 @@ export type SnackbarState = {
   timeout: number;
 };
 
+interface SnackbarPayload {
+  message: string | string[];
+  color: SnackbarColor;
+  timeout?: number;
+}
+
 const initialState: SnackbarState = {
   visible: false,
   message: "",
@@ -19,11 +25,11 @@ const initialState: SnackbarState = {
 const snackbar: Module<SnackbarState, any> = {
   state: initialState,
   mutations: {
-    showSnackbar(state, { message, color, timeout = 3000 }) {
+    showSnackbar(state, payload: SnackbarPayload) {
       state.visible = true;
-      state.message = message;
-      state.color = color;
-      state.timeout = timeout;
+      state.message = payload.message;
+      state.color = payload.color;
+      state.timeout = payload.timeout || 3000;
     },
     hideSnackbar(state) {
       state.visible = false;
