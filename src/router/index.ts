@@ -40,9 +40,13 @@ const routes: Array<RouteConfig> = [
     name: "logout",
     redirect: "/login",
   },
+  {
+    path: "*",
+    redirect: "/",
+  },
 ];
 
-const router = new VueRouter({ routes });
+const router = new VueRouter({ routes, mode: "history" });
 
 router.beforeEach((to, _, next) => {
   const token = getToken() ?? "";
