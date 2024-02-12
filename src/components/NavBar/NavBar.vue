@@ -22,6 +22,7 @@
     </div>
 
     <v-app-bar-nav-icon
+      id="hamburguer"
       class="d-flex d-sm-none"
       @click="mobileNavActions.openMobileNav()"
     ></v-app-bar-nav-icon>
@@ -36,11 +37,17 @@ import AppLogo from "../AppLogo/AppLogo.vue";
 </script>
 
 <style scoped lang="scss">
+#hamburguer {
+  .v-icon {
+    color: white !important;
+  }
+}
 .nav {
   gap: 0.5rem;
   .nav-item {
     padding: 0.5rem;
     font-size: 0.75rem;
+    color: white !important;
     @media screen and (min-width: 1200px) {
       font-size: 1rem;
       padding: 1rem;

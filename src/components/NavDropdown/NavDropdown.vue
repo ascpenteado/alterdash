@@ -1,7 +1,7 @@
 <template>
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      <v-btn v-on="on" color="secondary" icon class="ml-10 mr-1">
+      <v-btn v-on="on" color="#FFFFFF" icon class="ml-10 mr-1">
         <v-icon>mdi-cog-outline</v-icon>
       </v-btn>
     </template>

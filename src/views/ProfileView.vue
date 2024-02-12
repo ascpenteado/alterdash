@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="3">
+      <v-col cols="8" sm="6" md="4" lg="3">
         <h1>Perfil</h1>
         <v-card class="profile">
           <v-img :src="user.foto" alt="User photo" aspect-ratio="1"></v-img>

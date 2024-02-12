@@ -33,7 +33,7 @@ export const preset: VuetifyPreset = {
     themes: {
       light: {
         primary: "#1976D2",
-        secondary: "#FFFFFF",
+        secondary: "#666666",
         accent: "#FF4081",
         error: "#FF5252",
         info: "#2196F3",
@@ -42,7 +42,7 @@ export const preset: VuetifyPreset = {
       },
       dark: {
         primary: "#1A237E",
-        secondary: "#FFFFFF",
+        secondary: "#f3f3f3",
         accent: "#FF4081",
         error: "#FF5252",
         info: "#2196F3",
