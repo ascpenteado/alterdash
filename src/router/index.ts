@@ -19,12 +19,12 @@ const routes: Array<RouteConfig> = [
         name: "home",
         component: HomeView,
       },
-      // {
-      //   path: "/profile",
-      //   name: "profile",
-      //   component: () =>
-      //     import(/* webpackChunkName: "profile" */ "../views/ClientsView.vue"),
-      // },
+      {
+        path: "/profile",
+        name: "profile",
+        component: () =>
+          import(/* webpackChunkName: "profile" */ "../views/ProfileView.vue"),
+      },
       ...clientRoutes,
       ...productRoutes,
     ],
