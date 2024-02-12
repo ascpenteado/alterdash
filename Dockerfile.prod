@@ -1,0 +1,29 @@
+FROM node:18-alpine as BUILD
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+
+RUN yarn install --frozen-lockfile
+
+COPY . .
+
+RUN yarn build
+
+# Stage 2: Production stage
+FROM caddy:2.4.6-alpine
+
+# Set working directory
+WORKDIR /usr/share/caddy
+
+# Copy built files from the previous stage
+COPY --from=build /app/dist /usr/share/caddy
+
+# Expose port
+EXPOSE 80
+
+# Specify Caddyfile with configuration
+COPY Caddyfile /etc/caddy/Caddyfile
+
+# Start Caddy
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]

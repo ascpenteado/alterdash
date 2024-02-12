@@ -1,0 +1,23 @@
+# docker-compose up alterdash_dev
+# docker-compose up alterdash_prod
+version: "3.8"
+services:
+  alterdash_dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+    environment:
+      - VUE_APP_API_BASE_URL=${VUE_APP_API_BASE_URL}
+    ports:
+      - "8080:8080"
+
+  alterdash_prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    environment:
+      - VUE_APP_API_BASE_URL=${VUE_APP_API_BASE_URL}
+    ports:
+      - "8080:80"
