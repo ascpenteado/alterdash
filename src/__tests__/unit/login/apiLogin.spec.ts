@@ -13,7 +13,7 @@ jest.mock("@/router", () => ({
   push: jest.fn(),
 }));
 
-describe("Login", () => {
+describe("Login - apiLogin", () => {
   test("should login successfully when valid email and password are provided", async () => {
     // arrange
     const email = "test@example.com";

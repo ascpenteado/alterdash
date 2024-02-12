@@ -5,7 +5,7 @@ import Vuetify from "vuetify";
 
 Vue.use(Vuetify);
 
-describe("LoginForm.vue", () => {
+describe("Login - LoginForm.vue", () => {
   const localVue = createLocalVue();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let wrapper: any;
