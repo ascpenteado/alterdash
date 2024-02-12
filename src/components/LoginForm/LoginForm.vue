@@ -20,7 +20,7 @@
 import Vue from "vue";
 import { validateLoginFormFields } from "./LoginForm.helpers";
 import { apiLogin } from "@/services/login";
-import store from "@/store";
+import store, { SnackbarMutation } from "@/store";
 
 const LoginForm = Vue.extend({
   data() {
@@ -33,7 +33,7 @@ const LoginForm = Vue.extend({
     async login() {
       const errors = validateLoginFormFields(this.email, this.password);
       if (errors?.length) {
-        store.commit("snackbar/showSnackbar", {
+        store.commit(SnackbarMutation.ShowSnackbar, {
           message: errors,
           color: "error",
         });

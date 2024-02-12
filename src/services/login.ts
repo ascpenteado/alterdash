@@ -1,4 +1,4 @@
-import store, { SnackbarMutation } from "@/store";
+import store, { SnackbarMutation, UserMutation } from "@/store";
 import router from "../router";
 
 import { ObjetoUsuario } from "../types/users.types";
@@ -21,7 +21,11 @@ export const apiLogin = async (email: string, password: string) => {
     });
 
     if (res.token) {
+      store.commit(UserMutation.SetEmail, res.usuario.email);
+      store.commit(UserMutation.SetName, res.usuario.nome);
+      store.commit(UserMutation.SetPhoto, res.usuario.foto);
       setToken(res.token);
+      localStorage.setItem("id", res.usuario.id.toString());
       router.push("/");
     }
   } catch (error) {
