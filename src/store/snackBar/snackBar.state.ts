@@ -1,5 +1,3 @@
-// src/store/snackbar.ts
-
 import { Module } from "vuex";
 import { SnackbarColor } from "@/types/snackbar.types";
 
@@ -10,14 +8,16 @@ export type SnackbarState = {
   timeout: number;
 };
 
+const initialState: SnackbarState = {
+  visible: false,
+  message: "",
+  color: null,
+  timeout: 3000,
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const snackbar: Module<SnackbarState, any> = {
-  state: {
-    visible: false,
-    message: "",
-    color: null,
-    timeout: 3000,
-  },
+  state: initialState,
   mutations: {
     showSnackbar(state, { message, color, timeout = 3000 }) {
       state.visible = true;
