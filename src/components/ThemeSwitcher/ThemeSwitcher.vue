@@ -1,23 +1,35 @@
 <template>
   <v-select
-    :items="['dark', 'light', 'system']"
+    :items="['light', 'dark', 'system']"
+    color="accent"
     v-model="theme"
-    label="Theme"
+    label="Tema"
   ></v-select>
 </template>
 
 <script lang="ts">
+import { isDarkModePreferredByUser } from "@/utils/isDarkModePreferredByUser";
 import Vue from "vue";
 
 const ThemeSwitcher = Vue.extend({
   data() {
     return {
-      theme: "dark",
+      theme: "system",
     };
   },
   watch: {
     theme(theme) {
-      document.documentElement.setAttribute("data-theme", theme);
+      switch (theme) {
+        case "light":
+          this.$vuetify.theme.dark = false;
+          break;
+        case "dark":
+          this.$vuetify.theme.dark = true;
+          break;
+        case "system":
+          this.$vuetify.theme.dark = isDarkModePreferredByUser();
+          break;
+      }
     },
   },
 });
