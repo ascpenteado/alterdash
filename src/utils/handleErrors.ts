@@ -21,7 +21,6 @@ export const handleErrors = (error: any) => {
     });
 
     remove("token");
-    router.push("/login");
   }
 
   store.commit(SnackbarMutation.ShowSnackbar, {
